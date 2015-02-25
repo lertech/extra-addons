@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+OpenERP, Open Source Management Solution
+Copyright (C) 2014  Grupo ESOC <www.grupoesoc.es>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<openerp>
+<data>
+
+<record id="compose_form" model="ir.ui.view">
+    <field name="name">mail.compose.forward.form</field>
+    <field name="model">mail.compose.forward</field>
+    <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//label[@for='partner_ids']" position="before">
+            <field
+                name="destination_object_id"
+                on_change="onchange_destination_object_id(destination_object_id, context)"/>
+            <field
+                name="move_attachments"
+                attrs="{'invisible':['|',
+                                     ('destination_object_id', '=', False),
+                                     ('attachment_ids', '=', [])]}"/>
+        </xpath>
+    </field>
+</record>
+
+<record id="compose_action" model="ir.actions.act_window">
+    <field name="name">Forward Email</field>
+    <field name="res_model">mail.compose.forward</field>
+    <field name="src_model">mail.message</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_id" ref="compose_form"/>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+</data>
+</openerp>
