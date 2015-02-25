@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data noupdate="1">  
+    <record model="res.bank"  id="l10n_ve_bank0">
+      <field name="name">Banco Central de Venezuela</field>
+      <field name="bic">0001</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank1">
+      <field name="name">Industrial</field>
+      <field name="bic">0003</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank2">
+      <field name="name">Banco de Venezuela</field>
+      <field name="bic">0102</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank3">
+      <field name="name">Venezolano de Crédito</field>
+      <field name="bic">0104</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank4">
+      <field name="name">Mercantil</field>
+      <field name="bic">0105</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank5">
+      <field name="name">Provincial</field>
+      <field name="bic">0108</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank6">
+      <field name="name">Bancaribe</field>
+      <field name="bic">0114</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank7">
+      <field name="name">Exterior</field>
+      <field name="bic">0115</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank8">
+      <field name="name">Banco Occidental de Descuento</field>
+      <field name="bic">0116</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank9">
+      <field name="name">Caroni</field>
+      <field name="bic">0128</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank10">
+      <field name="name">Banesco</field>
+      <field name="bic">0134</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank11">
+      <field name="name">Sofitasa</field>
+      <field name="bic">0137</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank12">
+      <field name="name">Palza</field>
+      <field name="bic">0138</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank13">
+      <field name="name">Bangente</field>
+      <field name="bic">0146</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank14">
+      <field name="name">Pueblo Soberano</field>
+      <field name="bic">0149</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank15">
+      <field name="name">Fondo Común</field>
+      <field name="bic">0151</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank16">
+      <field name="name">100% Banco</field>
+      <field name="bic">0156</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank17">
+      <field name="name">Delsur</field>
+      <field name="bic">0157</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank18">
+      <field name="name">Banco del Tesoro</field>
+      <field name="bic">0163</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank19">
+      <field name="name">Agrícola de Venezuela</field>
+      <field name="bic">0166</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank20">
+      <field name="name">Bancrecer</field>
+      <field name="bic">0168</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank21">
+      <field name="name">Mibanco</field>
+      <field name="bic">0169</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank22">
+      <field name="name">Activo</field>
+      <field name="bic">0171</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank23">
+      <field name="name">Bancamiga</field>
+      <field name="bic">0172</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank24">
+      <field name="name">Banplus</field>
+      <field name="bic">0174</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank25">
+      <field name="name">Bicentenario</field>
+      <field name="bic">0175</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank26">
+      <field name="name">Citibank</field>
+      <field name="bic">0190</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+    <record model="res.bank"  id="l10n_ve_bank27">
+      <field name="name">Banco Nacional de Crédito</field>
+      <field name="bic">0191</field>
+      <field name="country" model="res.country" search="[('code','ilike','ve')]"/>
+    </record>
+  </data>
+</openerp>
