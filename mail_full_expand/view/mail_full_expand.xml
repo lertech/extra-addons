@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+OpenERP, Open Source Management Solution
+Copyright (C) 2014  Grupo ESOC <www.grupoesoc.es>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<openerp>
+<data>
+
+<record id="view" model="ir.ui.view">
+    <field name="name">mail.message.full_expand</field>
+    <field name="model">mail.message</field>
+    <field name="arch" type="xml">
+        <form string="Message" version="7.0">
+            <group>
+                <field name="author_id" readonly="1"/>
+                <field name="email_from" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="partner_ids"
+                       widget="many2many_tags"
+                       readonly="1"/>
+                <field name="notified_partner_ids"
+                       widget="many2many_tags"
+                       readonly="1"/>
+            </group>
+            <h1><field name="subject" readonly="1"/></h1>
+            <field name="body" readonly="1"/>
+            <field name="attachment_ids"
+                   widget="many2many_binary"
+                   readonly="1"/>
+        </form>
+    </field>
+</record>
+
+<record id="act_window" model="ir.actions.act_window">
+    <field name="name">Read Full Email</field>
+    <field name="res_model">mail.message</field>
+    <field name="src_model">mail.message</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_id" ref="view"/>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+</data>
+</openerp>
