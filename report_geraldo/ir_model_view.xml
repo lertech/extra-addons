@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<record model='ir.ui.view' id='view_model_form'>
+			<field name='name'>ir.model_form.inherit.report.geraldo</field>
+			<field name='model'>ir.model</field>
+			<field name='inherit_id' ref='base.view_model_form'/>
+			<field name='arch' type='xml'>
+				<xpath expr="//field[@name='osv_memory']" position="after">
+					<field name="custom_cubic_report" attrs="{'invisible':[('osv_memory','=',True)]}"/>
+				</xpath>
+				<xpath expr="//notebook" position="inside">
+					<page string="Custom Cubic Report" attrs="{'invisible':['|',('custom_cubic_report','=',False),('osv_memory','=',True)]}">
+						<field name="custom_cubic_report_src" nolabel="1"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

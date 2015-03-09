@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    	
+        <record id="act_report_xml_view" model="ir.ui.view">
+            <field name="name">ir.actions.report.xml.inherit.geraldo</field>
+            <field name="model">ir.actions.report.xml</field>
+            <field name="inherit_id" ref="base.act_report_xml_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Security']" position="before" >
+                    <page string="Cubic Report" attrs="{'invisible':[('report_type','!=','cubicReport')]}">
+                    	<group>
+	                        <group>
+	                        	<field name="generator_type"/>
+	                        	<field name="report_page_size"/>
+	                        	<field name="report_page_size_custom" attrs="{'invisible':[('report_page_size','!=','custom')]}"/>
+	                    		<field name="report_mode"/>
+	                        </group>
+	                        <group>
+	                        	<field name="extension_file"/>
+	                        	<field name="report_page_orientation"/>
+	                    		<field name="report_layout"/>
+	                    		<field name="report_company_detail"/>
+	                        </group>
+	                    </group>
+	                    <group>
+	                    	<field name="custom_report"/>
+	                    </group>
+	                    <separator string="Basic Report Customize" attrs="{'invisible':[('custom_report','=',False)]}"/>
+	                    <group>
+	                    	<field name="report_title" attrs="{'invisible':[('custom_report','=',False)]}"/>
+	                    </group>
+	                    <group>
+	                    	<field name="custom_style"/>
+	                    </group>
+	                    <separator string="Customized Styles to Print" attrs="{'invisible':[('custom_style','=',False)]}"/>
+	                    <field name="custom_style_src" nolabel="1" attrs="{'invisible':[('custom_style','=',False)]}"/>
+	                    <separator string="Customized Report Params" attrs="{'invisible':[('act_window_id','=',False)]}"/>
+	                    <field name="custom_params_src" nolabel="1" attrs="{'invisible':[('act_window_id','=',False)]}"/>
+	                    <group>
+	                    	<field name="custom_sql"/>
+	                    </group>
+	                    <separator string="Customized SQL" attrs="{'invisible':[('custom_sql','=',False)]}"/>
+	                    <field name="custom_sql_src" nolabel="1" attrs="{'invisible':[('custom_sql','=',False)]}"/>
+	                    <group>
+	                    	<field name="custom_domain" attrs="{'invisible':[('custom_sql','=',True)]}"/>
+	                    </group>
+	                    <separator string="Customized Domain" attrs="{'invisible':['|',('custom_sql','=',True),('custom_domain','=',False)]}"/>
+	                    <field name="custom_domain_src" nolabel="1" attrs="{'invisible':['|',('custom_sql','=',True),('custom_domain','=',False)]}"/>
+	                    <group>
+	                    	<field name="custom_order" attrs="{'invisible':[('custom_sql','=',True)]}"/>
+	                    </group>
+	                    <separator string="Customized Order By" attrs="{'invisible':['|',('custom_sql','=',True),('custom_order','=',False)]}"/>
+	                    <field name="custom_order_src" nolabel="1" attrs="{'invisible':['|',('custom_sql','=',True),('custom_order','=',False)]}"/>
+	                    <group>
+	                    	<field name="custom_fields"/>
+	                    </group>
+	                    <separator string="Customized Fields to Print" attrs="{'invisible':[('custom_fields','=',False)]}"/>
+	                    <field name="custom_fields_src" nolabel="1" attrs="{'invisible':[('custom_fields','=',False)]}"/>
+	                    <group>
+	                    	<field name="custom_class"/>
+	                    </group>
+	                    <separator string="Custom Report Class" attrs="{'invisible':[('custom_class','=',False)]}"/>
+	                    <group>
+	                    	<group>
+	                    		<field name="report_module" attrs="{'invisible':[('custom_class','=',False)]}"/>
+	                    	</group>
+	                    	<group>
+	                    		<field name="report_class" attrs="{'invisible':[('custom_class','=',False)]}"/>
+	                    	</group>
+	                    </group>
+	                    <group>
+	                    	<field name="custom_attributes"/>
+	                    </group>
+	                    <separator string="Advanced Customized Main Title" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+	                    <field name="custom_title_src" nolabel="1" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+	                    <separator string="Advanced Customized Attributes on Main Bands" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+	                    <field name="custom_attributes_src" nolabel="1" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+	                    <separator string="Advanced Customized Report Properties" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+	                    <field name="custom_report_properties_src" nolabel="1" attrs="{'invisible':[('custom_attributes','=',False)]}"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

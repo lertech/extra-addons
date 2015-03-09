@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="account_invoice_print" model="ir.actions.report.xml">
+            <field name="name">Invoice Print</field>
+            <field name="report_name">account.invoice.report.print</field>
+            <field name="model">account.invoice</field>
+            <field name="report_type">cubicReport</field>
+            <field name="report_mode">form</field>
+            <field name="report_page_size">A4</field>
+            <field name="report_page_orientation">portrait</field>
+            <field name="generator_type">prn</field>
+            <field name="menu_show" eval="1"/>
+            <field name="report_company_detail" eval="0"/>
+            <field name="custom_fields" eval="1"/>
+            <field name="custom_fields_src">{
+'page_header': [
+        ],
+'begin'  :  [
+        ],
+'detail'  :  [
+			{'type':'value', 'name':'number', 'left': 13*cm, 'top': 0*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 8, 'alignment': TA_LEFT}
+				},
+			{'type':'value', 'name':'partner_id', 'left': 3.5*cm, 'top': 2.5*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 12, 'alignment': TA_LEFT}
+				},
+			{'type':'value', 'name':'date_invoice', 'left': 17.5*cm, 'top': 2.5*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 12, 'alignment': TA_LEFT}
+				},
+			{'type': 'code', 'name': 'company_addres', 'left': 3.5*cm, 'top': 4*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 12, 'alignment': TA_LEFT},
+				'src': """# obj: Browse object or current record
+# result: Value to return
+addr = []
+addr += obj.partner_id.street and [obj.partner_id.street] or []
+addr += obj.partner_id.street2 and [obj.partner_id.street2] or []
+addr += obj.partner_id.city and [obj.partner_id.city] or []
+addr += obj.partner_id.state_id.name and [obj.partner_id.state_id.name] or []
+addr += obj.partner_id.country_id and obj.partner_id.country_id.name and [obj.partner_id.country_id.name] or []
+result = ", ".join(addr)
+"""
+				},
+			{'type':'code', 'name':'vat', 'left': 3.5*cm, 'top': 5.5*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 12, 'alignment': TA_LEFT},
+				'src':"result = obj.partner_id.vat and obj.partner_id.vat[2:] or ''"
+				},
+			{'type':'code', 'name':'pickings', 'left': 15.5*cm, 'top': 5.5*cm,
+				'style': {'fontName': 'Courier', 'fontSize': 12, 'alignment': TA_LEFT},
+				'src':"""cr.execute('select order_id from sale_order_invoice_rel where invoice_id=%s'%(obj.id))
+order_ids = cr.fetchall()
+sale_obj = pool.get('sale.order')
+sale_ids = []
+for order in order_ids:
+    sale_ids.append(order[0])
+for sale in sale_obj.browse(cr,uid,sale_ids):
+    result += sale.name + ' / '
+if result[-3:] == ' / ': result = result[:-3]
+"""
+				},
+        ],
+'summary' :  [
+        ],
+'page_footer': [
+		],
+'subreports': [
+		{
+			'name'			: 'Detalle',
+			'queryset_string': '%(object)s.invoice_line',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'value', 'name': 'quantity',
+							'colWidth': 1.8*cm, 
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_CENTER},
+						},
+					{'type':'code', 'name':'description', 'colWidth': 11.8*cm,
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_LEFT},
+							'src':"result = '%s - %s'%(obj.product_id.name,obj.name)"
+						},
+					{'type': 'value', 'name': 'price_unit',
+							'colWidth': 2.5*cm, 
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_RIGHT},
+						},
+					{'type': 'value', 'name': 'price_subtotal',
+							'colWidth': 3.2*cm, 
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_RIGHT},
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin.parent'	: {'top_position': 5.7*cm, 'visible_force': True},
+					'detail.parent'	: {'borders': {}},
+				},
+		},
+		{
+			'name'			: 'SubTotal',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'code', 'name': 'amount', 
+							'eval':"pool.get('ir.translation').amount_to_text(obj.amount_total, 'pe', obj.currency_id.name)"},
+					{'type': 'value', 'name': 'amount_untaxed',
+							'colWidth': 3*cm, 'left': 13.5*cm, 'top': 1.5*cm,
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_RIGHT},
+						},
+					{'type': 'value', 'name': 'amount_tax',
+							'colWidth': 3*cm, 'left': 13.5*cm, 'top': 2*cm,
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_RIGHT},
+						},
+					{'type': 'value', 'name': 'amount_total',
+							'colWidth': 3*cm, 'left': 13.5*cm, 'top': 2.5*cm,
+							'style': {'fontName': 'Courier', 'fontSize': 10, 'alignment': TA_RIGHT},
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin.parent'	: {'top_position': 19.7*cm, 'visible_force': True},
+					'detail.parent'	: {'borders': {}},
+				},
+		},
+	],
+}</field>
+			<field name="custom_attributes" eval="1"/>
+            <field name="custom_title_src">{'tree': [],'form': []}</field>
+            <field name="custom_attributes_src">{
+            	'page_header':{},
+				'title':{},
+				'begin':{},
+				'detail':{'top_position': 3.2*cm},
+				'summary':{},
+				'page_footer':{}
+				}</field>
+        </record>
+        
+    </data>
+</openerp>

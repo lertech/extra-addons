@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="purchase_order_report_form" model="ir.actions.report.xml">
+            <field name="name">Purchase Order</field>
+            <field name="report_name">purhcase.order.report.form</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">cubicReport</field>
+            <field name="report_mode">form</field>
+            <field name="menu_show" eval="1"/>
+            <field name="report_company_detail" eval="1"/>
+            <field name="custom_attributes" eval="1"/>
+            <field name="custom_title_src"># %(model)s: Model description
+# %(field)s: Field Name
+{
+'tree': [
+        {'type':'system', 'expression':'%(report_title)s', 'top':0.4*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+'form': [
+        {'type':'value', 'name':'name', 'value_prefix':"Purchase Order - %(field)s: ", 'top':0.5*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+}</field>
+            <field name="custom_fields" eval="1"/>
+            <field name="custom_fields_src">{
+'page_header': [
+            {'type':'image', 'file':s.browse('res.users',uid).company_id.logo, 'left':0*cm, 'top':0*cm, 'right':4*cm, 'bottom':0.5*cm, 'style':{'alignment':TA_LEFT}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.name, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.rml_header1, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+        ],
+'begin'  :  [
+        ],
+'detail'  :  [
+			{'type':'field', 'name':'name',
+					'label.colWidth': 3.9*cm,
+				},
+			{'type':'label', 'text':'Supplier', 'colSpan':4, 'style':'title3'},
+			{'type':'field', 'name':'partner_id'},
+			{'type':'field', 'name':'partner_id.phone'},
+			{'type':'field', 'name':'partner_id.street'},
+			{'type':'field', 'name':'minimum_planned_date'},
+			{'type':'dummy', 'colSpan':2},
+			{'type':'field', 'name':'partner_id.ref'},
+			{'type':'field', 'name':'dest_address_id'},
+			{'type':'field', 'name':'partner_id.fax'},
+        ],
+'summary' :  [
+        ],
+'page_footer': [
+            {'type':'label', 'text':s.pool('res.users').browse(cr,uid,uid).company_id.rml_footer, 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'system', 'expression':'%(now:%d/%m/%Y)s %(now:%H:%M)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_LEFT}},
+            {'type':'system', 'expression':'Pag. %(page_number)s/%(page_count)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+		],
+'subreports': [
+		{
+			'name'			: 'Tabla 1',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'field', 'name': 'date_order',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER, },
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'requisition_id.account_analytic_id',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'notes',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'origin',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'payment_term_id',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'begin'		: {},
+					'detail'	: {},
+					'summary'	: {},
+				},
+		},
+		{
+			'name'			: 'Tabla 2',
+			'queryset_string': '%(object)s.order_line',
+			'begin'	:[
+					{'type':'rect', 'top':0.3*cm, 'left':0.00, 
+							'width':BAND_WIDTH, 'height':0.85*cm, 
+							'fill':True, 'fill_color':HexColor(0xE0E0E0),
+							'stroke': False,
+						},
+				],
+			'detail'	:[
+					{'type': 'field', 'name': 'product_qty',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'product_uom',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'product_id.name',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'name',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_LEFT},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'price_unit',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'taxes_id',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+						},
+					{'type': 'field', 'name': 'price_subtotal',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin'		: {'auto_expand_height': False,'height':1.1*cm,},
+					'detail'	: {},
+					'summary'	: {},
+				},
+		},
+		{
+			'name'			: 'Tabla 3',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'dummy', 'colSpan': 5},
+					{'type': 'field', 'name': 'amount_untaxed',
+							'label.colWidth': 5.3*cm,
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_RIGHT},
+							'insert': [
+									{'type':'value', 'name':'currency_id.symbol', 'colWidth': 1*cm},
+								],
+						},
+					{'type': 'dummy', 'colSpan': 5},
+					{'type': 'field', 'name': 'amount_tax',
+							'label.colWidth': 5.3*cm,
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_RIGHT},
+							'insert': [
+									{'type':'value', 'name':'currency_id.symbol', 'colWidth': 1*cm},
+								],
+						},
+					{'type': 'dummy', 'colSpan': 5},
+					{'type': 'field', 'name': 'amount_total',
+							'label.colWidth': 5.3*cm,
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_RIGHT},
+							'insert': [
+									{'type':'value', 'name':'currency_id.symbol', 'colWidth': 1*cm},
+								],
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin'		: {},
+					'detail'	: {'cols': 8, 'mode': 'form', '_top_increment': 0.4*cm,
+											'borders': {'top': True}, 
+										},
+					'summary'	: {},
+				},
+		},
+		{
+			'name'			: 'Tabla 4',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'label', 'text': 'Invoice To:', 'colSpan': 4, 'style':'title3'},
+					{'type': 'value', 'name': 'company_id.name', 'colSpan': 4},
+					{'type': 'code', 'name': 'company_addres', 'colSpan': 4,
+							'src': """# obj: Browse object or current record
+# result: Value to return
+result = ", ".join([obj.company_id.street or '', obj.company_id.street2 or '', obj.company_id.city or '',obj.company_id.state_id.name or '',obj.company_id.country_id.name or ''])
+"""},
+					{'type': 'value', 'name': 'company_id.vat', 'colSpan': 4,
+							'prefix': 'VAT Number: ',
+						},
+				],
+			'summary'	:[
+					{'type': 'dummy', 'colSpan': 2},
+					{'type': 'label', 'text': 'Authorized by:'},
+					{'type': 'dummy', 'colSpan': 3},
+					{'type': 'value', 'name': 'validator.name', 
+							'style': {'fontName': 'Helvetica', 'fontSize': 10, 'alignment': TA_CENTER},
+						},
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'begin'		: {},
+					'detail'	: {'mode': 'form', '_top_increment': 0.4*cm,},
+					'summary'	: {'mode': 'form', '_top_increment': 0.4*cm,},
+				},
+		},
+	],
+}</field>
+        </record>
+        
+        <record id="purchase_order_report_tree" model="ir.actions.report.xml">
+            <field name="name">Purchase Order List</field>
+            <field name="report_name">purhcase.order.report.list</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">cubicReport</field>
+            <field name="report_page_orientation">landscape</field>
+            <field name="menu_show" eval="1"/>
+            <field name="multi" eval="1"/>
+            <field name="report_company_detail" eval="1"/>
+            <field name="custom_attributes" eval="1"/>
+            <field name="custom_title_src"># %(model)s: Model description
+# %(field)s: Field Name
+{
+'tree': [
+        {'type':'system', 'expression':'Purchase Orders', 'top':0.4*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+'form': [
+        {'type':'value', 'name':'name', 'value_prefix':"Purchase Order - %(field)s: ", 'top':0.5*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+}</field>
+            <field name="custom_fields" eval="1"/>
+            <field name="custom_fields_src">{
+'page_header': [
+            {'type':'image', 'file':s.browse('res.users',uid).company_id.logo, 'left':0*cm, 'top':0*cm, 'right':4*cm, 'bottom':0.5*cm, 'style':{'alignment':TA_LEFT}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.name, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.rml_header1, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+        ],
+'begin'  :  [
+        ],
+'detail'  :  [
+			{'type':'field', 'name':'name'},
+			{'type':'field', 'name':'date_order'},
+			{'type':'field', 'name':'partner_id'},
+			{'type':'field', 'name':'minimum_planned_date'},
+			{'type':'field', 'name':'origin'},
+			{'type':'field', 'name':'amount_untaxed'},
+			{'type':'field', 'name':'amount_total'},
+			{'type':'field', 'name':'state'},
+        ],
+'summary' :  [
+        ],
+'page_footer': [
+            {'type':'label', 'text':s.pool('res.users').browse(cr,uid,uid).company_id.rml_footer, 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'system', 'expression':'%(now:%d/%m/%Y)s %(now:%H:%M)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_LEFT}},
+            {'type':'system', 'expression':'Pag. %(page_number)s/%(page_count)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+		],
+}</field>
+        </record>
+
+
+        <record id="purchase_order_quotation_report_form" model="ir.actions.report.xml">
+            <field name="name">Request for Quotation</field>
+            <field name="report_name">purhcase.order.quotation.report.form</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">cubicReport</field>
+            <field name="report_mode">form</field>
+            <field name="menu_show" eval="1"/>
+            <field name="report_company_detail" eval="1"/>
+            <field name="custom_attributes" eval="1"/>
+            <field name="custom_title_src"># %(model)s: Model description
+# %(field)s: Field Name
+{
+'tree': [
+        {'type':'system', 'expression':'%(report_title)s', 'top':0.4*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+'form': [
+        {'type':'value', 'name':'name', 'value_prefix':"Request for Quotation - %(field)s: ", 'top':0.5*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+}</field>
+            <field name="custom_fields" eval="1"/>
+            <field name="custom_fields_src">{
+'page_header': [
+            {'type':'image', 'file':s.browse('res.users',uid).company_id.logo, 'left':0*cm, 'top':0*cm, 'right':4*cm, 'bottom':0.5*cm, 'style':{'alignment':TA_LEFT}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.name, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.rml_header1, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+        ],
+'begin'  :  [
+        ],
+'detail'  :  [
+        ],
+'summary' :  [
+        ],
+'page_footer': [
+            {'type':'label', 'text':s.pool('res.users').browse(cr,uid,uid).company_id.rml_footer, 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'system', 'expression':'%(now:%d/%m/%Y)s %(now:%H:%M)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_LEFT}},
+            {'type':'system', 'expression':'Pag. %(page_number)s/%(page_count)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+		],
+'subreports': [
+		{
+			'name'			: 'Tabla 1',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'field', 'name': 'partner_id',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER, },
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'partner_id.ref',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'partner_id.street',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_CENTER},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'date_order',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'origin',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'warehouse_id',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin'		: {},
+					'detail'	: {},
+					'summary'	: {},
+				},
+		},
+		{
+			'name'			: 'Separador 1',
+			'queryset_string': '[%(object)s]',
+			'begin'	:[
+					{'type': 'label', 'text': 'Quotation Details', 'style': 'title2'},
+				],
+			'detail'	:[
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin'		: {},
+					'detail'	: {},
+					'summary'	: {},
+				},
+		},
+		{
+			'name'			: 'Tabla 2',
+			'queryset_string': '%(object)s.order_line',
+			'begin'	:[
+				],
+			'detail'	:[
+					{'type': 'field', 'name': 'product_id.name',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'name',
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'value.style': {'fontName': 'Helvetica', 'fontSize': 9, 'alignment': TA_LEFT},
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'date_planned',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'product_qty',
+							'colWidth': 2*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+					{'type': 'field', 'name': 'product_uom',
+							'colWidth': 1.3*cm, 
+							'label.borders': {'top': True, 'bottom': True},
+							'value.borders': {'top': True}, 
+							'label.style': {'fontName': 'Helvetica-Bold', 'fontSize': 9, 'alignment': TA_CENTER, 'backColor':HexColor(0xE0E0E0)},
+						},
+				],
+			'summary'	:[
+				],
+			'attributes'	:{
+					'subreport'	: {},
+					'title'		: {},
+					'begin'		: {},
+					'detail'	: {},
+					'summary'	: {},
+				},
+		},
+	],
+}</field>
+        </record>
+        
+        <record id="purchase_order_quotation_report_tree" model="ir.actions.report.xml">
+            <field name="name">Request for Quotation List</field>
+            <field name="report_name">purhcase.order.quotation.report.list</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">cubicReport</field>
+            <field name="report_page_orientation">landscape</field>
+            <field name="menu_show" eval="1"/>
+            <field name="multi" eval="1"/>
+            <field name="report_company_detail" eval="1"/>
+            <field name="custom_attributes" eval="1"/>
+            <field name="custom_title_src"># %(model)s: Model description
+# %(field)s: Field Name
+{
+'tree': [
+        {'type':'system', 'expression':'Request for Quotation', 'top':0.4*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+'form': [
+        {'type':'value', 'name':'name', 'value_prefix':"Request for Quotation - %(field)s: ", 'top':0.5*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':'Title1'},
+    ],
+}</field>
+            <field name="custom_fields" eval="1"/>
+            <field name="custom_fields_src">{
+'page_header': [
+            {'type':'image', 'file':s.browse('res.users',uid).company_id.logo, 'left':0*cm, 'top':0*cm, 'right':4*cm, 'bottom':0.5*cm, 'style':{'alignment':TA_LEFT}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.name, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'label', 'text':s.browse('res.users',uid).company_id.rml_header1, 'top':0.3*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+        ],
+'begin'  :  [
+        ],
+'detail'  :  [
+			{'type':'field', 'name':'name'},
+			{'type':'field', 'name':'date_order'},
+			{'type':'field', 'name':'partner_id'},
+			{'type':'field', 'name':'minimum_planned_date'},
+			{'type':'field', 'name':'origin'},
+			{'type':'field', 'name':'state'},
+        ],
+'summary' :  [
+        ],
+'page_footer': [
+            {'type':'label', 'text':s.pool('res.users').browse(cr,uid,uid).company_id.rml_footer, 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_CENTER}},
+            {'type':'system', 'expression':'%(now:%d/%m/%Y)s %(now:%H:%M)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_LEFT}},
+            {'type':'system', 'expression':'Pag. %(page_number)s/%(page_count)s', 'top':0.1*cm, 'left':0*cm, 'width':BAND_WIDTH, 'style':{'alignment':TA_RIGHT}},
+		],
+}</field>
+        </record>
+    </data>
+</openerp>
