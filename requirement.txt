@@ -1,1 +1,2 @@
-geraldo==0.4.17
+Geraldo==0.4.17
+SOAPpy==0.12.22
