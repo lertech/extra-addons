@@ -25,28 +25,26 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
-from openerp import tools
-from openerp.tools.translate import _
-
-import math
-import re
-import logging
-from lxml import etree
+import sys
+import xml.etree.cElementTree as ET
+import xml.dom.minidom
 
 
-class res_country_state_city(osv.Model):
-    _description = "Country state city"
-    _name = 'res.country.state.city'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True, select=True,
-                help='Administrative divisions of a state.'),
-        'state_id': fields.many2one('res.country.state', 'State',
-                    required=True),
-        'country_id': fields.related('state_id', 'country_id',
-                    type='many2one', relation='res.country',
-                    string='Country', store=True, readonly=True),
-        'code': fields.char('City Code', size=5,
-                            help='The city code in max. five chars.'),
-    }
-    _order = 'name'
+def add_node(node_name, attrs, parent_node, minidom_xml_obj, attrs_types, order=False):
+        if not order:
+            order = attrs
+        new_node = minidom_xml_obj.createElement(node_name)
+        for key in order:
+            if attrs_types[key] == 'attribute':
+                new_node.setAttribute(key, attrs[key])
+            elif attrs_types[key] == 'textNode':
+                key_node = minidom_xml_obj.createElement(key)
+                text_node = minidom_xml_obj.createTextNode(attrs[key])
+                key_node.appendChild(text_node)
+                new_node.appendChild(key_node)
+            elif attrs_types[key] == 'att_text':
+                new_node.setAttribute('name', key)
+                text_node = minidom_xml_obj.createTextNode(attrs[key])
+                new_node.appendChild(text_node)
+        parent_node.appendChild(new_node)
+        return new_node

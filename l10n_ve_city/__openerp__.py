@@ -30,17 +30,17 @@
     "category" : "Localization/Venezuela",
     "description": """
         Load City of Venezuela
+        module of mexico localization vauxoo and modified  for Venezuelan localization
     """,
     "website" : "http://www.lertech.com.ve",
     "depends" : [
             "base",
+            "city",
+            "l10n_ve_states",
         ],
     "demo" : [],
     "data" : [
-        'res_city_view.xml',
-        'partner_address_view.xml',
-        'security/city_security.xml',
-        'security/ir.model.access.csv',
+        'data/ve_city.xml',
     ],
     "installable" : True,
     "active" : False,

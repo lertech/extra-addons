@@ -8,6 +8,42 @@
               <field name="code">001</field>
               <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
          </record>
+         <record id="res_country_state_city_ve_002" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">San Fernando de Atabapo</field>
+              <field name="code">002</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record>
+         <record id="res_country_state_city_ve_003" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">Maroa</field>
+              <field name="code">003</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record>
+         <record id="res_country_state_city_ve_004" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">San Carlos de R&#237;o Negro</field>
+              <field name="code">004</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record>
+         <record id="res_country_state_city_ve_005" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">San Juan de Manapiare</field>
+              <field name="code">005</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record>
+         <record id="res_country_state_city_ve_006" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">La Esmeralda</field>
+              <field name="code">006</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record>
+         <record id="res_country_state_city_ve_007" model="res.country.state.city">
+         	  <field name="country_id" ref="base.ve"/>
+              <field name="name">Carmen de Rat&#243;n</field>
+              <field name="code">007</field>
+              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_am"/>
+         </record> 
 <!--Anzoategui-->
          <record id="res_country_state_city_ve_002" model="res.country.state.city">
          	  <field name="country_id" ref="base.ve"/>
@@ -44,7 +80,7 @@
          <record id="res_country_state_city_008" model="res.country.state.city">
               <field name="name">Biruaca</field>
               <field name="code">008</field>
-              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_ap"/>
+              <field name="state_id" ref="l10n_Ve_states.res_country_state_ve_ap"/>
          </record>
          <record id="res_country_state_city_009" model="res.country.state.city">
               <field name="name">Guasdualito</field>
@@ -60,22 +96,22 @@
          <record id="res_country_state_city_011" model="res.country.state.city">
               <field name="name">Cagua</field>
               <field name="code">011</field>
-              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_ar"/>
+              <field name="state_id" ref="res_country_state_ar"/>
          </record>
          <record id="res_country_state_city_012" model="res.country.state.city">
               <field name="name">El Consejo</field>
               <field name="code">012</field>
-              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_ar"/>
+              <field name="state_id" ref="res_country_state_ar"/>
          </record>
          <record id="res_country_state_city_013" model="res.country.state.city">
               <field name="name">El Lim&#243;n</field>
               <field name="code">013</field>
-              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_ar"/>
+              <field name="state_id" ref="res_country_state_ar"/>
          </record>
          <record id="res_country_state_city_014" model="res.country.state.city">
               <field name="name">La Victoria</field>
               <field name="code">014</field>
-              <field name="state_id" ref="l10n_ve_states.res_country_state_ve_ar"/>
+              <field name="state_id" ref="res_country_state_ar"/>
          </record>
          <record id="res_country_state_city_015" model="res.country.state.city">
               <field name="name">Las Tejer&#237;as</field>
