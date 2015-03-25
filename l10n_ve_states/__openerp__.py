@@ -24,8 +24,8 @@
 
 {
     'name': 'Estates Venezuela',
-    'version': '0.1',
-    'author': ['LerTech','FJGM'],
+    'version': '1.0',
+    'author': ['LerTech'],
     'category': 'Localization',
     'website': 'http://www.lertech.com.ve/',
     'license': 'GPL-3',
