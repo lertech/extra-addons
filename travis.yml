@@ -15,7 +15,7 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - git clone --single-branch --depth=1 https://github.com/Vauxoo/odoo-venezuela.git -b 7.0 ${HOME}/odoo-venezuela-lib
   - export PYTHONPATH=${HOME}/odoo-venezuela-lib:${PYTHONPATH}
-  - travis_install_nightly
+  - travis_install_nightly 7.0
 
 script:
   - travis_run_tests 7.0
