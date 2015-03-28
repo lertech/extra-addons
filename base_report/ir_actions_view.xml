@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		
+		<record model='ir.ui.view' id='act_report_xml_view'>
+			<field name='name'>ir.actions.report.xml.inherit</field>
+			<field name='model'>ir.actions.report.xml</field>
+			<field name='inherit_id' ref='base.act_report_xml_view'/>
+			<field name='arch' type='xml'>
+				<xpath expr="//field[@name='auto']" position="after">
+					<field name="menu_show"/>
+					<field name="act_window_id"/>
+				</xpath>
+				<xpath expr="//page[@string='Security']" position="after">
+					<page string="Report Edit">
+						<field name="report_rml_content_txt" nolabel="1"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
+		
+	</data>
+</openerp>
