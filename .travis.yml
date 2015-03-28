@@ -1,6 +1,8 @@
 sudo: required
 language: python
 
+build_image: vauxoo/odoo-80-image-shippable-auto
+
 python:
   - "2.7"
 
