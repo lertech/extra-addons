@@ -1,2 +1,3 @@
 Geraldo==0.4.17
 SOAPpy==0.12.22
+PyCrypto==2.6.1
