@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	
+   		<record model='ir.ui.view' id='statement_form_invoice_lines_view_inherit_bank'>
+			<field name='name'>account.statement.from.invoice.lines.form.inherit.bank</field>
+			<field name='model'>account.statement.from.invoice.lines</field>
+			<field name='inherit_id' ref='account_voucher.view_account_statement_from_invoice_lines'/>
+			<field name='arch' type='xml'>
+                <xpath expr="//field[@name='line_ids']" position="attributes">
+                	<attribute name="domain">
+                    	[('account_id.type','in',['receivable','payable']),('journal_id.type','in',['sale','sale_refund','purchase','purchase_refund']),('reconcile_id','=',False), ('state', '=', 'valid')]
+                    </attribute>
+                </xpath>
+			</field>
+		</record>
+    	
+    </data>
+</openerp>
