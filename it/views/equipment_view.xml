@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2014 Leandro Ezequiel Baldi
+    <baldileandro@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<openerp>
+
+    <data>
+
+        <!-- Action for Buttons -->
+        <record id="act_equipment_2_access" model="ir.actions.act_window">
+            <field name="res_model">it.access</field>
+            <field name="view_type">form</field>
+            <field name="name">Access</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_equipment_id': active_id }</field>
+        </record>
+
+        <record id="act_equipment_2_equipment" model="ir.actions.act_window">
+            <field name="res_model">it.equipment</field>
+            <field name="view_type">form</field>
+            <field name="name">Virtuals</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_virtual_parent_id': active_id }</field>
+        </record>
+
+        <record id="act_equipment_2_backup" model="ir.actions.act_window">
+            <field name="res_model">it.backup</field>
+            <field name="view_type">form</field>
+            <field name="name">Backups</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_equipment_id': active_id }</field>
+        </record>
+
+        <!-- Equipments -->
+        <record model="ir.ui.view" id="it_equipment_tree">
+            <field name="name">it.equipment.tree</field>
+            <field name="model">it.equipment</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Equipments">
+                    <field name="identification"/>
+                    <field name="description"/>
+                    <field name="equipment_type"/>
+                    <field name="function_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="it_equipment_form">
+            <field name="name">it.equipment.form</field>
+            <field name="model">it.equipment</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Equipments" version="7.0">
+                    <sheet>
+                        <div class="oe_left oe_avatar">
+                            <field name="image" class="oe_left oe_avatar" widget="image"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                            <field name="name" placeholder="NAME"/>
+                            <field name="description" placeholder="DESCRIPTION"/>
+                            <field name="partner_id" placeholder="OWNER"/>
+                            <field name="function_ids" widget="many2many_tags" placeholder="Functions..."/>
+                            </h1>
+                        </div>
+                        <div class="oe_right oe_button_box" name="button_box">
+                            <button name="%(act_equipment_2_access)d"
+                                    string="Access"
+                                    type="action"
+                                    attrs="{'invisible':[('is_access','=', False )]}"
+                            />
+                            <button name="%(act_equipment_2_equipment)d"
+                                    string="Virtuals"
+                                    type="action"
+                                    attrs="{'invisible': [('function_host','=', False )]}"
+                            />
+                            <button name="%(act_equipment_2_backup)d"
+                                    string="Backups"
+                                    type="action"
+                                    attrs="{'invisible':[('is_backup','=', False )]}"
+                            />
+                        </div>
+                        <separator/>
+                        <group>
+                            <!-- groups and fields
+                            <group string="Type">
+
+                            </group>
+                            -->
+                        </group>
+                        <separator string="Note"/>
+                        <field colspan="4" name="note" nolabel="1"/>
+                        <notebook>
+                            <page string="Physical Information" attrs="{'invisible':[('equipment_type','!=', 'bundle' )]}">
+                                <group>
+                                    <field name="physical_component_ids" nolabel="1" colspan="4"/>
+                                </group>
+                            </page>
+                            <page string="Virtual Machine Data" attrs="{'invisible':[('equipment_type','!=', 'virtual' )]}">
+                                <group>
+                                    <group string="Host">
+                                        <field name="virtual_parent_id"/>
+                                    </group>
+                                    <group string="Configuration">
+                                        <field name="virtual_memory_amount"/>
+                                        <field name="virtual_disk_amount"/>
+                                        <field name="virtual_processor_amount"/>
+                                        <field name="virtual_network_amount"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Product Data" attrs="{'invisible':[('equipment_type','!=', 'product' )]}">
+                                <group>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="product_serial_number"/>
+                                        <field name="product_warranty"/>
+                                        <field name="product_buydate"/>
+                                    </group>
+                                    <group>
+                                        <field name="product_note"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Partition Information" attrs="{'invisible':[('is_partitioned','=', False )]}">
+                                <group>
+                                    <field name="partitions_ids" nolabel="1" colspan="4"/>
+                                </group>
+                            </page>
+                            <page string="Service Information" attrs="{'invisible':[('is_contracted','=', False )]}">
+                                <group>
+                                    <group string="Contract Information">
+                                        <field name="contract_partner_id"/>
+                                        <field name="contract_client_number"/>
+                                        <field name="contract_owner"/>
+                                        <field name="contract_nif"/>
+                                        <field name="contract_direction"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Router Configuration" attrs="{'invisible':[('function_router','=', False )]}">
+                                <group>
+                                    <field name="router_dmz"/>
+                                    <field name="router_forward_ids">
+                                        <tree string="Forward Registry" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="source_port"/>
+                                            <field name="destination_port"/>
+                                            <field name="source_address"/>
+                                            <field name="destination_address"/>
+                                            <field name="type"/>
+                                        </tree>
+                                    </field>
+                                    <field name="router_nat_ids">
+                                        <tree string="Nat Registry" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="source_address"/>
+                                            <field name="destination_address"/>
+                                        </tree>
+                                    </field>
+                                    <field name="router_rules_ids">
+                                        <tree string="Rules Registry" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="source_port"/>
+                                            <field name="destination_port"/>
+                                            <field name="source_address"/>
+                                            <field name="destination_address"/>
+                                            <field name="permission"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Network Configuration" attrs="{'invisible':[('is_static_ip','=', False )]}">
+                                <group>
+                                    <group string="Network Configuration">
+                                        <field name="equipment_network_ids" nolabel="1" colspan="4"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="File Server" attrs="{'invisible':[('function_fileserver','=', False )]}">
+                                <group>
+                                    <field name="equipment_mapping_ids" nolabel="1" colspan="4"/>
+                                </group>
+                            </page>
+                            <page string="Domain Controller" attrs="{'invisible':[('function_dc','=', False )]}">
+                                <group>
+                                    <field name="dc_name"/>
+                                    <field name="dc_type"/>
+                                    <field name="dc_user_ids">
+                                        <tree string="Users" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="user"/>
+                                            <field name="mail"/>
+                                            <field name="actived"/>
+                                        </tree>
+                                    </field>
+                                    <field name="dc_group_ids">
+                                        <tree string="Groups" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="description"/>
+                                            <field name="actived"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Wireless Config" attrs="{'invisible':[('function_ap','=', False )]}">
+                                <group string="Wifi">
+                                    <field name="ap_ssid"/>
+                                    <field name="ap_auth_type"/>
+                                    <field name="ap_password"/>
+                                </group>
+                                <group string="Guest Access">
+                                    <field name="ap_guest"/>
+                                    <field name="ap_guest_ssid" attrs="{'invisible':[('ap_guest','=', False )]}"/>
+                                    <field name="ap_guest_password" attrs="{'invisible':[('ap_guest','=', False )]}"/>
+                                </group>
+                            </page>
+                            <page string="DHCP Config" attrs="{'invisible':[('function_dhcp','=', False )]}">
+                                <group>
+                                    <field name="dhcp_scope"/>
+                                    <field name="dhcp_relay"/>
+                                    <field name="dhcp_reservation_ids">
+                                        <tree string="Reservations" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="mac_address"/>
+                                            <field name="ip_address"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Databases" attrs="{'invisible':[('function_database','=', False )]}">
+                                <group>
+                                    <field name="db_engine"/>
+                                    <field name="db_setting_ids">
+                                        <tree string="Engine Settings" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="value"/>
+                                            <field name="description"/>
+                                        </tree>
+                                    </field>
+                                    <field name="db_ids">
+                                        <tree string="Databases" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="codification"/>
+                                            <field name="description"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Firewall and Proxy" attrs="{'invisible':[('function_firewall', '=', False)]}">
+                                <group string="Firewall Filter">
+                                    <field name="firewall_filter_ids" nolabel="1" colspan="4">
+                                        <tree string="Firewall Filters" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="source_address"/>
+                                            <field name="destination_address"/>
+                                            <field name="service_port"/>
+                                            <field name="permission"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Proxy">
+                                    <field name="proxy_transparent"/>
+                                    <field name="proxy_enable_ssk"/>
+                                    <field name="proxy_adblocking"/>
+                                    <field name="proxy_port"/>
+                                    <field name="proxy_cache_size"/>
+                                </group>
+                            </page>
+                            <page string="VPN" attrs="{'invisible':[('function_vpn', '=', False)]}">
+                                <group string="VPN Server Config">
+                                    <field name="vpn_protocol"/>
+                                    <field name="vpn_address"/>
+                                    <field name="vpn_server_cert"/>
+                                    <field name="vpn_cacn"/>
+                                    <field name="vpn_tun"/>
+                                    <field name="vpn_nat"/>
+                                    <field name="vpn_c2c"/>
+                                    <field name="vpn_gateway"/>
+                                    <field name="vpn_search_domain"/>
+                                    <field name="vpn_wins_server"/>
+                                </group>
+                            </page>
+                            <page string="Operating System" attrs="{'invisible':[('is_os','=', False )]}">
+                                <group>
+                                    <field name="os_name"/>
+                                    <field name="os_company"/>
+                                    <field name="os_version"/>
+                                </group>
+                            </page>
+                            <page string="Applications" attrs="{'invisible':[('is_application','=', False )]}">
+                                <group>
+                                    <field name="application_ids" nolabel="1" colspan="4"/>
+                                </group>
+                            </page>
+                            <page string="Changes" >
+                                <field name="change_ids" nolabel="1" colspan="4"/>
+                            </page>
+                            <page string="Audit Data" groups="it.group_it_mod">
+                                <group>
+                                    <group>
+                                        <field name="user_id"/>
+                                        <field name="creation_date"/>
+                                        <field name="pin"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Configuration" groups="it.group_it_mod">
+                                <group string="Equipment Type">
+                                    <field name="equipment_type"/>
+                                </group>
+                                <newline/>
+                                <group>
+                                    <group string="Basic Configuration">
+                                        <field name="active"/>
+                                        <field name="company_id" string="Company" groups="base.group_multi_company"/>
+                                        <field name="is_access"/>
+                                        <field name="is_backup"/>
+                                        <field name="is_application"/>
+                                        <field name="is_contracted"/>
+                                        <field name="is_static_ip"/>
+                                        <field name="is_partitioned"/>
+                                        <field name="is_os"/>
+                                    </group>
+                                    <group string="Function Configuration">
+                                        <field name="function_host"/>
+                                        <field name="function_router"/>
+                                        <field name="function_dc"/>
+                                        <field name="function_fileserver"/>
+                                        <field name="function_database"/>
+                                        <field name="function_vpn"/>
+                                        <field name="function_firewall"/>
+                                        <field name="function_dhcp"/>
+                                        <field name="function_ap"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="it_equipment_search" >
+            <field name="name">it.equipment.search</field>
+            <field name="model">it.equipment</field>
+            <field name="arch" type="xml">
+                <search string="Equipment">
+                    <!--Searchs-->
+                    <field name="identification" string="Identification Name"/>
+                    <field name="pin" string="PIN"/>
+                    <field name="partner_id" string="Partner"/>
+                    <field name="equipment_type" string="Type"/>
+                    <field name="virtual_parent_id" string="Host"/>
+                    <!--Filters-->
+                    <filter name="is_contracted" string="Contracted" domain="[('is_contracted','=',1)]"/>
+                    <filter name="is_contracted" string="Own" domain="[('is_contracted','=',0)]"/>
+                    <separator/>
+                    <filter name="is_static_ip" string="Static IP" domain="[('is_static_ip','=',1)]"/>
+                    <filter name="is_static_ip" string="DHCP" domain="[('is_static_ip','=',0)]"/>
+                    <separator/>
+                    <filter name="is_backup" string="With Backup" domain="[('is_backup','=',1)]"
+                            help="Equipments with backup"/>
+                    <filter name="is_backup" string="Without Backup" domain="[('is_backup','=',0)]"
+                            help="Equipments without backup"/>
+                    <separator/>
+                    <filter name="is_access" string="With Access" domain="[('is_access','=',1)]"
+                            help="Equipments with access"/>
+                    <filter name="is_access" string="Without Access" domain="[('is_access','=',0)]"
+                            help="Equipments without access"/>
+                    <separator/>
+                    <filter name="is_application" string="With Applications" domain="[('is_application','=',1)]"
+                            help="Equipments with applications"/>
+                    <filter name="is_application" string="Without Applications" domain="[('is_application','=',0)]"
+                            help="Equipments without applications"/>
+                    <separator/>
+                    <filter string="Bundle Type" domain="[('equipment_type','=','bundle')]"/>
+                    <filter string="Virtual Type" domain="[('equipment_type','=','virtual')]"/>
+                    <filter string="Product Type" domain="[('equipment_type','=','product')]"/>
+                    <separator string="Functions"/>
+                    <filter name="is_partitioned" string="Partitioned" domain="[('is_partitioned','=',1)]"
+                            help="Equipments with partitions"/>
+                    <filter name="function_dc" string="Domain Controllers" domain="[('function_dc','=',1)]"/>
+                    <filter name="function_fileserver" string="FileServers" domain="[('function_fileserver','=',1)]"/>
+                    <filter name="function_host" string="Hosts" domain="[('function_host','=',1)]"/>
+                    <filter name="function_router" string="Routers" domain="[('function_router','=',1)]"/>
+                    <filter name="function_database" string="Database Servers" domain="[('function_database','=',1)]"/>
+                    <filter name="function_vpn" string="VPN Servers" domain="[('function_vpn','=',1)]"/>
+                    <filter name="function_firewall" string="Firewall and Proxy" domain="[('function_firewall','=',1)]"/>
+                    <filter name="function_dhcp" string="DHCP Servers" domain="[('function_dhcp','=',1)]"/>
+                    <filter name="function_ap" string="Access Point" domain="[('function_ap','=',1)]"/>
+                    <separator/>
+                    <filter domain="[('user_id','=',uid)]" help="Registered by my"/>
+                    <!--Groups-->
+                    <group expand="0" string="Group By...">
+                        <filter string="Partner" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'equipment_type'}"/>
+                        <filter string="Host" icon="terp-personal" domain="[]" context="{'group_by':'virtual_parent_id'}"/>
+                        <filter string="Contractor" icon="terp-personal" domain="[]" context="{'group_by':'contract_partner_id'}"/>
+                        <filter string="Registrant" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="it_equipment_action" model="ir.actions.act_window">
+            <field name="name">Equipments</field>
+            <field name="res_model">it.equipment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="it_equipment_action" id="it_equipment" sequence="20" parent="it_menu_general"/>
+
+    </data>
+
+</openerp>
+
+<!-- vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4-->
