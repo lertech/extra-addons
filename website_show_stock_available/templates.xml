@@ -1,0 +1,15 @@
+<openerp>
+    <data>
+        <template id="product_show_available" inherit_id="website_sale.product">
+            <xpath expr="//*[@id='add_to_cart']" position="after">
+                <t t-if="product.type" t-value="product">
+                <p class="product_show_available" style="margin-top: 4px; font-weight: bold;">
+                    Lagerbestand: 
+                    <t t-if="product.virtual_available &lt; 1">ausverkauft</t>
+                    <t t-if="product.virtual_available &gt; 0"><t t-esc="product.virtual_available" /></t>
+                </p>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</openerp>
