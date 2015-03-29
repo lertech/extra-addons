@@ -1,0 +1,89 @@
+<openerp>
+    <data>
+        <template id="product_price_anonymous_hide_price" inherit_id="website_sale.product_price">
+            <xpath expr="//div[hasclass('product_price')]" position="replace">
+                <div t-if="not user_id.partner_id.name == 'Public user'" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price mt16">
+                  <h4 class="oe_price_h4 css_editable_mode_hidden">
+                      <span class="text-danger oe_default_price" style="text-decoration: line-through; white-space: nowrap;" t-field="product.lst_price" t-field-options="{               &quot;widget&quot;: &quot;monetary&quot;,               &quot;from_currency&quot;: &quot;website.currency_id&quot;,               &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;            }"/>
+                      <b class="oe_price" style="white-space: nowrap;" t-field="product.price" t-field-options="{                &quot;widget&quot;: &quot;monetary&quot;,                &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;            }"/>
+                      <span itemprop="price" style="display:none;" t-esc="product.price"/>
+                      <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name"/>
+                  </h4>
+                  <h4 class="css_editable_mode_display" style="display: none;">
+                    <span t-field="product.lst_price" t-field-options="{                &quot;widget&quot;: &quot;monetary&quot;,                &quot;display_currency&quot;: &quot;website.pricelist_id.currency_id&quot;            }"/>
+                  </h4>
+                  <h4 class="hidden oe_not_available bg-warning">Product not available</h4>
+                </div>
+            </xpath>
+        </template>
+        <template id="product_item_anonymous_hide_form" inherit_id="website_sale.products_item">
+            <xpath expr="//form" position="replace">
+              <form action="/shop/cart/update" method="post" style="display: inline-block;">
+              <div itemscope="itemscope" itemtype="http://schema.org/Product">
+              <div class="ribbon-wrapper">
+                <div class="ribbon btn btn-danger">Sale</div>
+              </div>
+              <div class="oe_product_image">
+                  <a itemprop="url" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                      <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')"/>
+                  </a>
+              </div>
+              <section>
+                  <h5><strong><a itemprop="name" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))" t-field="product.name"/></strong></h5>
+                  <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids and not user_id.partner_id.name == 'Public user'">
+                      <b>
+                          <t t-if="(compute_currency(product.lst_price) - product.price) &gt; 0.1">
+                            <del class="text-danger" style="white-space: nowrap;" t-field="product.lst_price" t-field-options="{                   &quot;widget&quot;: &quot;monetary&quot;,                   &quot;from_currency&quot;: &quot;website.currency_id&quot;,                   &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                 }"/>&amp;nbsp;
+                          </t>
+                          <span t-field="product.price" style="white-space: nowrap;" t-field-options="{                    &quot;widget&quot;: &quot;monetary&quot;,                    &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                }">
+                          </span>
+                          <span itemprop="price" style="display:none;" t-esc="product.price"/>
+                          <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name"/>
+                      </b>
+                  </div>
+              </section>
+              </div>
+              </form>
+            </xpath>
+        </template>
+        <template id="product_quantity_anonymous_no" inherit_id="website_sale.product_quantity">
+            <xpath expr="//div[hasclass('css_quantity')]" position="replace">
+                <div t-if="not user_id.partner_id.name == 'Public user'" class="css_quantity input-group oe_website_spinner">
+                    <span class="input-group-addon">
+                        <a t-attf-href="#" class="mb8 js_add_cart_json">
+                            <i class="fa fa-minus"/>
+                        </a>
+                    </span>
+                    <input type="text" class="js_quantity form-control" data-min="1" name="add_qty" value="1"/>
+                    <span class="input-group-addon">
+                        <a t-attf-href="#" class="mb8 float_left js_add_cart_json">
+                            <i class="fa fa-plus"/>
+                        </a>
+                    </span>
+                </div>   
+            </xpath>
+        </template>
+        <template id="product_anonymous_no_cart" inherit_id="website_sale.product">
+            <xpath expr="//form" position="replace">
+                <form t-if="not user_id.partner_id.name == 'Public user'" t-att-action="keep('/shop/cart/update')" class="js_add_cart_variants" method="POST">
+                  <div class="js_product">
+                    <t t-placeholder="select">
+                      <input type="hidden" class="product_id" name="product_id" t-att-value="int(product.product_variant_ids[0]) if len(product.product_variant_ids) == 1 else '0'"/>
+                      <t t-call="website_sale.variants">
+                        <t t-set="ul_class" t-value="'nav-stacked'"/>
+                      </t>
+                    </t>
+                    <t t-call="website_sale.product_price"/>
+                    <p t-if="len(product.product_variant_ids) &gt; 1" class="css_not_available_msg bg-danger" style="padding: 15px;">Product not available</p>
+                    <a id="add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product a-submit" href="#">Add to Cart</a>
+                  </div>
+                </form>
+            </xpath>
+        </template>
+        <template id="display_anoymous" inherit_id="website_sale.products">
+            <xpath expr="//div[@id='wrap']" position="before">
+                <div t-if="user_id.partner_id.name == 'Public user'" class="jumbotron mt16 mb16" data-oe-model="ir.ui.view" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[1]"><section class="jumbotron mb0 mt4"><div class="container"><h1>Gewerbliche Kunden</h1><p>Auf dieser Website verkaufen wir ausschliesslich an gewerbliche, akkreditierte Kunden.</p><p>Sie können unsere Produkte sehen, die Preise und Kauffunktionen sind abgeschaltet.</p><p>Für ein Händlerkonto oder Fragen zu unserem Sortiment und Händlern nutzen Sie gerne unser Kontaktformular.</p><p><a class="btn btn-primary btn-lg" data-cke-saved-href="/page/website.contactus" href="/page/website.contactus">Kontaktformular</a></p></div></section></div>
+            </xpath>
+        </template>
+    </data>
+</openerp>
