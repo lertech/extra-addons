@@ -23,5 +23,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-import res_city
-import partner_address
+
