@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/lertech/extra-addons.svg)](https://travis-ci.org/lertech/extra-addons)
 
-# exrta-addons 7.0
+# exrta-addons master
 
-Repositorio de modulos para la version de Odoo 7.0
+Repositorio de modulos de pruebas para la version de Odoo 8.0
