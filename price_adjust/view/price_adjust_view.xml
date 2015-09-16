@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		====
+		View
+		====
+		<record id="view_price_adjust_history_tree" model="ir.ui.view">
+			<field name="name">price_adjust.history.tree</field>
+			<field name="model">price_adjust.history</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Price Adjustments">
+					<field name="name"/>
+					<field name="user"/>
+					<field name="date"/>
+					<field name="total"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_price_adjust_history_form" model="ir.ui.view">
+			<field name="name">price_adjust.history.form</field>
+			<field name="model">price_adjust.history</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Price Adjustments">
+					<field name="name" select="1"/>
+					<field name="user" select="1"/>
+					<field name="comment" colspan="4" select="2"/>
+					<field name="date" select="1"/>
+					<separator string="Price Adjustment" colspan="4"/>
+					<field name="categories" colspan="4" nolabel="1"/>
+					<field name="adjust"/>
+					<field name="basedon"/>
+					<field name="amount"/>
+					<field name="plus"/>
+					<separator string="Total Products adjusted" colspan="4"/>
+					<field name="total"/>
+				</form>
+			</field>
+		</record>
+
+		=======
+		Actions
+		=======
+		<record id="action_price_adjust_history_form" model="ir.actions.act_window">
+			<field name="name">Price Adjustment History</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">price_adjust.history</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="menu_price_adjust_wizard" action="wizard_price_adjust_wizard" parent="product.menu_product_pricelist_main" sequence="150" type="wizard"/>
+
+		<menuitem id="menu_price_adjust_history" action="action_price_adjust_history_form" parent="menu_price_adjust_wizard"/>
+	</data>
+</openerp>

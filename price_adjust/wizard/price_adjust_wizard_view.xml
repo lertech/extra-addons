@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <wizard
+            id="wizard_price_adjust_wizard"
+            model="product.pricelist"
+            name="price_adjust.adjust_price_wizard"
+            string="Adjust Prices"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,222 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* price_adjust
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 5.0.0\n"
+"Report-Msgid-Bugs-To: support@openerp.com\n"
+"POT-Creation-Date: 2009-03-09 09:33:36+0000\n"
+"PO-Revision-Date: 2009-03-09 09:33:36+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: price_adjust
+#: field:price_adjust.history,plus:0
+msgid " + "
+msgstr ""
+
+#. module: price_adjust
+#: constraint:ir.model:0
+msgid "The Object name must start with x_ and not contain any special character !"
+msgstr "De objectnaam moet beginnen met x_ en mag geen speciale karakters bevatten !"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#: wizard_view:price_adjust.adjust_price_wizard,init:0
+#, python-format
+msgid "Select Categories"
+msgstr "Selecteer categorieën"
+
+#. module: price_adjust
+#: field:price_adjust.history,adjust:0
+msgid "Adjusted Price"
+msgstr "Aangepaste prijs"
+
+#. module: price_adjust
+#: wizard_field:price_adjust.adjust_price_wizard,init,amount:0
+#: field:price_adjust.history,amount:0
+msgid "Base * "
+msgstr "Basis * "
+
+#. module: price_adjust
+#: field:price_adjust.history,basedon:0
+msgid "Base Price"
+msgstr "Basis prijs"
+
+#. module: price_adjust
+#: field:price_adjust.history,categories:0
+msgid "Categories Adjusted"
+msgstr "Aangepaste categorieën"
+
+#. module: price_adjust
+#: model:ir.actions.act_window,name:price_adjust.action_price_adjust_history_form
+#: model:ir.ui.menu,name:price_adjust.menu_price_adjust_history
+msgid "Price Adjustment History"
+msgstr "Prijs aanpassing historiek"
+
+#. module: price_adjust
+#: model:ir.module.module,shortdesc:price_adjust.module_name_translation
+msgid "Price Adjust Wizard"
+msgstr "Prijs aanpassing wizard"
+
+#. module: price_adjust
+#: view:price_adjust.history:0
+msgid "Price Adjustment"
+msgstr "Prijs aanpassing"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#, python-format
+msgid "Incorrect selection of base price"
+msgstr "Vekeerde selectie van basis prijs"
+
+#. module: price_adjust
+#: view:price_adjust.history:0
+msgid "Price Adjustments"
+msgstr "Prijs aanpassingen"
+
+#. module: price_adjust
+#: wizard_field:price_adjust.adjust_price_wizard,init,category:0
+msgid "Product Category"
+msgstr "Product categorie"
+
+#. module: price_adjust
+#: field:price_adjust.history,total:0
+msgid "Affected"
+msgstr "Aangepaste producten"
+
+#. module: price_adjust
+#: selection:price_adjust.adjust_price_wizard,init,adjust:0
+#: selection:price_adjust.adjust_price_wizard,init,basedon:0
+msgid "List Price"
+msgstr "Adviesprijs"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#: wizard_view:price_adjust.adjust_price_wizard,init:0
+#, python-format
+msgid "Select price to adjust and which to base on"
+msgstr "Selecteer de aan te passen prijs en de basis prijs"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#, python-format
+msgid "Price Adjust History"
+msgstr "Prijs aanpassing historiek"
+
+#. module: price_adjust
+#: field:price_adjust.history,user:0
+msgid "User"
+msgstr "Gebruiker"
+
+#. module: price_adjust
+#: field:price_adjust.history,date:0
+msgid "Date"
+msgstr "Datum"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#: wizard_view:price_adjust.adjust_price_wizard,init:0
+#, python-format
+msgid "Price Computation"
+msgstr "Prijs berekening"
+
+#. module: price_adjust
+#: wizard_field:price_adjust.adjust_price_wizard,init,descend:0
+msgid "Also adjust child categories"
+msgstr "Wijzig ook onderliggende categorieën"
+
+#. module: price_adjust
+#: constraint:ir.ui.view:0
+msgid "Invalid XML for View Architecture!"
+msgstr "Ongeldige XML voor Weergavearchitectuur."
+
+#. module: price_adjust
+#: wizard_button:price_adjust.adjust_price_wizard,init,finish:0
+msgid "Ok"
+msgstr "Ok"
+
+#. module: price_adjust
+#: field:price_adjust.history,name:0
+msgid "Name"
+msgstr "Naam"
+
+#. module: price_adjust
+#: view:price_adjust.history:0
+msgid "Total Products adjusted"
+msgstr "Totaal aangepaste producten"
+
+#. module: price_adjust
+#: selection:price_adjust.history,adjust:0
+#: selection:price_adjust.history,basedon:0
+msgid "List price"
+msgstr "Adviesprijs"
+
+#. module: price_adjust
+#: wizard_field:price_adjust.adjust_price_wizard,init,adjust:0
+msgid "Adjust"
+msgstr "Aan te passen"
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#, python-format
+msgid "Error"
+msgstr "Fout"
+
+#. module: price_adjust
+#: field:price_adjust.history,comment:0
+msgid "Comment"
+msgstr "Opmerking"
+
+#. module: price_adjust
+#: selection:price_adjust.history,adjust:0
+#: selection:price_adjust.history,basedon:0
+msgid "Cost price"
+msgstr "Kostprijs"
+
+#. module: price_adjust
+#: model:ir.actions.wizard,name:price_adjust.wizard_price_adjust_wizard
+#: model:ir.ui.menu,name:price_adjust.menu_price_adjust_wizard
+msgid "Adjust Prices"
+msgstr "Prijs aanpassen"
+
+#. module: price_adjust
+#: model:ir.model,name:price_adjust.model_price_adjust_history
+msgid "price_adjust.history"
+msgstr ""
+
+#. module: price_adjust
+#: code:addons/price_adjust/wizard/wizard_adjust_price.py:0
+#: wizard_view:price_adjust.adjust_price_wizard,init:0
+#, python-format
+msgid "Adjust Product Prices"
+msgstr "Pas product prijzen aan"
+
+#. module: price_adjust
+#: wizard_field:price_adjust.adjust_price_wizard,init,basedon:0
+msgid "Based on"
+msgstr "Gebaseerd op"
+
+#. module: price_adjust
+#: wizard_button:price_adjust.adjust_price_wizard,init,end:0
+msgid "Cancel"
+msgstr "Annuleren"
+
+#. module: price_adjust
+#: selection:price_adjust.adjust_price_wizard,init,adjust:0
+#: selection:price_adjust.adjust_price_wizard,init,basedon:0
+msgid "Cost Price"
+msgstr "Kostprijs"
+
+#. module: price_adjust
+#: model:ir.module.module,description:price_adjust.module_name_translation
+msgid "Price Adjust Wizard\n"
+"This wizard will allow you to adjust Cost Price and Sale Price for entire categories.\n"
+"You can either set a fixed price or use a multiplier to increase or decrease the price."
+msgstr ""
+
