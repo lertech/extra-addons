@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<record model='ir.ui.view' id='view_model_form'>
+			<field name='name'>res.company.form.inherit.geraldo</field>
+			<field name='model'>res.company</field>
+			<field name='inherit_id' ref='base.view_company_form'/>
+			<field name='arch' type='xml'>
+				<xpath expr="//notebook" position="inside">
+					<page string="Cubic Report" >
+						<group>
+							<field name="custom_cubic_report_layout"/>
+							<field name="custom_cubic_report"/>
+						</group>
+						<separator string="Custom Cubic Report" attrs="{'invisible':[('custom_cubic_report','=',False)]}"/>
+						<field name="custom_cubic_report_src" nolabel="1" attrs="{'invisible':[('custom_cubic_report','=',False)]}"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

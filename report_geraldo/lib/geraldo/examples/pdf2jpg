@@ -1,0 +1,22 @@
+#!/bin/bash
+convert child-bands-report-half-height.pdf child-bands-report-half-height.jpg
+convert child-bands-report.pdf child-bands-report.jpg
+convert graphics-report-half-height.pdf graphics-report-half-height.jpg
+convert graphics-report.pdf graphics-report.jpg
+convert groupping-report-half-height-2.pdf groupping-report-half-height-2.jpg
+convert groupping-report-half-height.pdf groupping-report-half-height.jpg
+convert groupping-report.pdf groupping-report.jpg
+convert simple-report-half-height.pdf simple-report-half-height.jpg
+convert simple-report.pdf simple-report.jpg
+convert users-report-half-height.pdf users-report-half-height.jpg
+convert users-report.pdf users-report.jpg
+convert subreports-report-half-height.pdf subreports-report-half-height.jpg
+convert subreports-report.pdf subreports-report.jpg
+convert charts-cairoplot-report.pdf charts-cairoplot-report.jpg
+convert charts-matplotlib-report.pdf charts-matplotlib-report.jpg
+convert inline-detail-report.pdf inline-detail-report.jpg
+convert inline-detail-report-half-height.pdf inline-detail-report-half-height.jpg
+convert additional-fonts.pdf additional-fonts.jpg
+convert report-with-barcodes.pdf report-with-barcodes.jpg
+convert report-with-charts.pdf report-with-charts.jpg
+

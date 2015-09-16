@@ -1,0 +1,155 @@
+                                                                                
+                                                                                
+                                                               Page # 1 of 7    
+    Username       Betty                                                        
+     Full name     Betty Garcia Pachec                                          
+     Superuser     False                                                        
+     ID            Name                                                         
+     22                     23                      24                         
+     Can add log entry      Can change log entr     Can delete log entr        
+                                                                                
+     4                      10                                                 
+     Can add group          Can add message                                    
+                   16 permissions foun                                          
+    Username       Davi                                                         
+                                                                                
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+                                                                                
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 2 of 7    
+    Username       George                                                       
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       John                                                         
+                                                                                
+     Full name                                                                  
+     Superuser     True                                                         
+                   16 permissions foun                                          
+    Username       Larry                                                        
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       Leni                                                         
+                                                                                
+     Superuser     False                                                        
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 3 of 7    
+                   16 permissions foun                                          
+    Username       Leticia                                                      
+                                                                                
+     Superuser     False                                                        
+                                                                                
+     ID            Name                                                         
+     22                     23                      24                         
+     Can add log entry      Can change log entr     Can delete log entr        
+     4                      10                      1                          
+     Can add group          Can add message         Can add permission         
+     7                      5                       11                         
+     Can add user           Can change group        Can change message         
+                                                                                
+     2                      8                       6                          
+     Can change permissi    Can change user         Can delete group           
+     12                                                                         
+     Can delete message                                                         
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 4 of 7    
+     3                      9                       13                         
+     Can delete permissi    Can delete user         Can add content typ        
+     14                     15                      28                         
+     Can change content     Can delete content      Can add customer           
+                                                                                
+     Can add product        Can add purchase        Can add purchase it       
+                                                                                
+     29                     26                      32                         
+     Can change customer    Can change product      Can change purchase        
+                   16 permissions foun                                          
+    Username       Marta                                                        
+                                                                                
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+                                                                                
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 5 of 7    
+    Username       Miltinho                                                     
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       Mychell                                                      
+                                                                                
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       Mychelle                                                     
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       Paul                                                         
+                                                                                
+     Superuser     True                                                         
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 6 of 7    
+                   16 permissions foun                                          
+    Username       Ringo                                                        
+                                                                                
+     Superuser     False                                                        
+                                                                                
+                   16 permissions foun                                          
+    Username       Tarsila                                                      
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Username       Verinha                                                      
+                                                                                
+     Superuser     False                                                        
+                   16 permissions foun                                          
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                                                                                                
+                                                                                
+                                                               Page # 7 of 7    
+    Username       Waltinho                                                     
+     Full name                                                                  
+     Superuser     False                                                        
+                   16 permissions foun                                          
+    Users count:   16 users found                                               
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                

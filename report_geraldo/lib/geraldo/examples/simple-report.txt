@@ -1,0 +1,46 @@
+                                                                                
+                                                                                
+                                Permissions list                                
+    ID         Name                                                             
+                                  Look those permissi                          
+    1          Can add permission                                               
+    2          Can change permission                                            
+    4          Can add group                                                    
+    5          Can change group                                                 
+    6          Can delete group                                                 
+    8          Can change user                                                  
+    9          Can delete user                                                  
+    10         Can add message                                                  
+    11         Can change message                                               
+    13         Can add content type                                             
+    14         Can change content type                                          
+    15         Can delete content type                                          
+    17         Can change session                                               
+    18         Can delete session                                               
+    19         Can add site                                                     
+    21         Can delete site                                                  
+    22         Can add log entry                                                
+    23         Can change log entry                                             
+    24         Can delete log entry                                             
+    26         Can change product                                               
+    27         Can delete product                                               
+    28         Can add customer                                                 
+    30         Can delete customer                                              
+    31         Can add purchase                                                 
+    32         Can change purchase                                              
+    34         Can add purchase item                                            
+    35         Can change purchase item                                         
+    36         Can delete purchase item                                         
+    That's all 36 permissions foun                                              
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                               Page # 1 of 1    
+                                                                                
