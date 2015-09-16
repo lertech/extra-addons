@@ -26,6 +26,7 @@ class account_invoice_line(osv.osv):
 
     def _get_prod_lots(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
+        #prueba de versionado
         for line in self.browse(cr, uid, ids, context=context):
             result[line.id] = []
             for order_line in line.order_lines:
