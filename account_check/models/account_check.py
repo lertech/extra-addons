@@ -1,279 +1,455 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#
-# Copyright (C) 2012 OpenERP - Team de Localización Argentina.
-# https://launchpad.net/~openerp-l10n-ar-localization
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+# For copyright and license notices, see __openerp__.py file in module root
+# directory
 ##############################################################################
-
-from openerp.osv import fields, osv
-from openerp import netsvc
-from openerp.tools.translate import _
-import time
+from openerp import fields, models, _, api
+from openerp.exceptions import Warning
 import logging
+import openerp.addons.decimal_precision as dp
 _logger = logging.getLogger(__name__)
 
-class account_check(osv.osv):
 
-	_name = 'account.check'
-	_description = 'Account Check'
-	_order = "id desc"
-	_inherit = ['mail.thread']
+class account_check(models.Model):
 
-	def _get_name(self, cr, uid, ids, field_name, args,context=None):
-		res = {}
-		for line in self.browse(cr, uid, ids, context=None):
-			if line.checkbook_id:
-				padding = line.checkbook_id.padding
-			else:
-				# TODO make padding configurable
-				padding = 8
-			res[line.id] = '%%0%sd' % padding % line.number
-		return res
+    _name = 'account.check'
+    _description = 'Account Check'
+    _order = "id desc"
+    _inherit = ['mail.thread']
 
-	def _get_destiny_partner(self, cr, uid, ids, field_name, args,context=None):
-		res = {}
-		for line in self.browse(cr, uid, ids, context=None):
-			partner_id = False
-			if line.type == 'third' and line.third_handed_voucher_id:
-				partner_id = line.third_handed_voucher_id.partner_id.id
-			elif line.type == 'issue':
-				partner_id = line.voucher_id.partner_id.id
-			res[line.id] = partner_id
-		return res
+    @api.model
+    def _get_checkbook(self):
+        journal_id = self._context.get('default_journal_id', False)
+        payment_subtype = self._context.get('default_type', False)
+        if journal_id and payment_subtype == 'issue_check':
+            checkbooks = self.env['account.checkbook'].search(
+                [('state', '=', 'active'), ('journal_id', '=', journal_id)])
+            return checkbooks and checkbooks[0] or False
 
-	def _get_source_partner(self, cr, uid, ids, field_name, args,context=None):
-		res = {}
-		for line in self.browse(cr, uid, ids, context=None):
-			partner_id = False
-			if line.type == 'third':
-				partner_id = line.voucher_id.partner_id.id
-			res[line.id] = partner_id
-		return res
+    @api.one
+    @api.depends('number', 'checkbook_id', 'checkbook_id.padding')
+    def _get_name(self):
+        padding = self.checkbook_id and self.checkbook_id.padding or 8
+        self.name = '%%0%sd' % padding % self.number
 
-	_columns = {
-		'name': fields.function(_get_name, type='char', string='Number',),
-		'number': fields.integer('Number', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-		'amount': fields.float('Amount', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-		'voucher_id': fields.many2one('account.voucher', 'Voucher', readonly=True, required=True),
-		'type': fields.related('voucher_id', 'journal_id', 'check_type', type='selection', selection=[('issue', 'Issue'),('third', 'Third')], string='Type', required=True, readonly=True, store=True),
-		'journal_id': fields.related('voucher_id', 'journal_id', type='many2one', relation="account.journal", string='Journal', readonly=True, store=True),
-		'issue_date': fields.date('Issue Date', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-		'payment_date': fields.date('Payment Date', readonly=True, help="Only if this check is post dated", states={'draft': [('readonly', False)]}),
-		'destiny_partner_id': fields.function(_get_destiny_partner, relation='res.partner', type="many2one", string='Destiny Partner',),
-		'user_id' : fields.many2one('res.users', 'User', readonly=True),
-		'clearing': fields.selection((
-				('24', '24 hs'),
-				('48', '48 hs'),
-				('72', '72 hs'),
-			), 'Clearing',readonly=True,states={'draft': [('readonly', False)]}),
-		'state': fields.selection((
-				('draft', 'Draft'),
-				('holding', 'Holding'),
-				('deposited', 'Deposited'),
-				('handed', 'Handed'),
-				('rejected', 'Rejected'),
-				('debited', 'Debited'),
-				('cancel', 'Cancel'),
-			), 'State', required=True, track_visibility='onchange'),
-		'supplier_reject_debit_note_id':fields.many2one('account.invoice','Supplier Reject Debit Note', readonly=True,),
-		'expense_account_move_id': fields.many2one('account.move','Expense Account Move', readonly=True),
+    @api.one
+    @api.depends(
+        'voucher_id',
+        'voucher_id.partner_id',
+        'type',
+        'third_handed_voucher_id',
+        'third_handed_voucher_id.partner_id',
+        )
+    def _get_destiny_partner(self):
+        partner_id = False
+        if self.type == 'third_check' and self.third_handed_voucher_id:
+            partner_id = self.third_handed_voucher_id.partner_id.id
+        elif self.type == 'issue_check':
+            partner_id = self.voucher_id.partner_id.id
+        self.destiny_partner_id = partner_id
 
-		# Related fields
-		'company_id': fields.related('voucher_id', 'company_id', type='many2one', relation='res.company', string='Company', store=True, readonly=True),
+    @api.one
+    @api.depends(
+        'voucher_id',
+        'voucher_id.partner_id',
+        'type',
+        )
+    def _get_source_partner(self):
+        partner_id = False
+        if self.type == 'third_check':
+            partner_id = self.voucher_id.partner_id.id
+        self.source_partner_id = partner_id
 
-		# Issue Check
-		'issue_check_subtype': fields.related('checkbook_id', 'issue_check_subtype', type='char', string='Subtype', readonly=True, store=True),
-		'checkbook_id': fields.many2one('account.checkbook', 'Checkbook', readonly=True, states={'draft': [('readonly', False)]}),
-		'debit_account_move_id': fields.many2one('account.move','Debit Account Move', readonly=True),
+    name = fields.Char(
+        compute='_get_name',
+        string=_('Number')
+        )
+    number = fields.Integer(
+        _('Number'),
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        copy=False
+        )
+    amount = fields.Float(
+        'Amount',
+        required=True,
+        readonly=True,
+        digits=dp.get_precision('Account'),
+        states={'draft': [('readonly', False)]},
+        )
+    company_currency_amount = fields.Float(
+        'Company Currency Amount',
+        readonly=True,
+        digits=dp.get_precision('Account'),
+        help='This value is only set for those checks that has a different '
+        'currency than the company one.'
+        )
+    voucher_id = fields.Many2one(
+        'account.voucher',
+        'Voucher',
+        readonly=True,
+        required=True,
+        ondelete='cascade',
+        )
+    type = fields.Selection(
+        related='voucher_id.journal_id.payment_subtype',
+        string='Type',
+        readonly=True,
+        store=True
+        )
+    journal_id = fields.Many2one(
+        'account.journal',
+        related='voucher_id.journal_id',
+        string='Journal',
+        readonly=True,
+        store=True
+        )
+    issue_date = fields.Date(
+        'Issue Date',
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        default=fields.Date.context_today,
+        )
+    payment_date = fields.Date(
+        'Payment Date',
+        readonly=True,
+        help="Only if this check is post dated",
+        states={'draft': [('readonly', False)]}
+        )
+    destiny_partner_id = fields.Many2one(
+        'res.partner',
+        compute='_get_destiny_partner',
+        string='Destiny Partner',
+        store=True,
+        )
+    user_id = fields.Many2one(
+        'res.users',
+        'User',
+        readonly=True,
+        default=lambda self: self.env.user,
+        )
+    clearing = fields.Selection([
+            ('24', '24 hs'),
+            ('48', '48 hs'),
+            ('72', '72 hs'),
+        ],
+        'Clearing',
+        readonly=True,
+        states={'draft': [('readonly', False)]})
+    state = fields.Selection([
+            ('draft', 'Draft'),
+            ('holding', 'Holding'),
+            ('deposited', 'Deposited'),
+            ('handed', 'Handed'),
+            ('rejected', 'Rejected'),
+            ('debited', 'Debited'),
+            ('returned', 'Returned'),
+            ('changed', 'Changed'),
+            ('cancel', 'Cancel'),
+        ],
+        'State',
+        required=True,
+        track_visibility='onchange',
+        default='draft',
+        copy=False,
+        )
+    supplier_reject_debit_note_id = fields.Many2one(
+        'account.invoice',
+        'Supplier Reject Debit Note',
+        readonly=True,
+        copy=False,
+        )
+    expense_account_move_id = fields.Many2one(
+        'account.move',
+        'Expense Account Move',
+        readonly=True,
+        copy=False,
+        )
+    replacing_check_id = fields.Many2one(
+        'account.check',
+        'Replacing Check',
+        readonly=True,
+        copy=False,
+        )
 
-		# Third check
-		'third_handed_voucher_id': fields.many2one('account.voucher', 'Handed Voucher', readonly=True,),
-		'source_partner_id': fields.function(_get_source_partner, relation='res.partner', type="many2one", string='Source Partner',),
-		'customer_reject_debit_note_id': fields.many2one('account.invoice','Customer Reject Debit Note', readonly=True,),
-		'bank_id': fields.many2one('res.bank', 'Bank', readonly=True, states={'draft': [('readonly', False)]}),
-		'vat': fields.char('Vat', size=11, states={'draft': [('readonly', False)]}),
-		'deposit_account_move_id': fields.many2one('account.move','Deposit Account Move', readonly=True),
-		# this one is used for check rejection
-		'deposit_account_id': fields.many2one('account.account','Deposit Account', readonly=True),
-	}
+    # Related fields
+    company_id = fields.Many2one(
+        'res.company',
+        related='voucher_id.company_id',
+        string='Company',
+        store=True,
+        readonly=True
+        )
 
-	def _check_number_interval(self, cr, uid, ids, context=None):
-		for obj in self.browse(cr, uid, ids, context=context):
-			if obj.type !='issue' or (obj.checkbook_id and obj.checkbook_id.range_from <= obj.number <= obj.checkbook_id.range_to):
-				return True
-		return False
+    # Issue Check
+    issue_check_subtype = fields.Selection(
+        related='checkbook_id.issue_check_subtype',
+        string='Subtype',
+        readonly=True, store=True
+        )
+    checkbook_id = fields.Many2one(
+        'account.checkbook',
+        'Checkbook',
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        default=_get_checkbook,
+        )
+    debit_account_move_id = fields.Many2one(
+        'account.move',
+        'Debit Account Move',
+        readonly=True,
+        copy=False,
+        )
 
-	def _check_number_issue(self, cr, uid, ids, context=None):
-		for obj in self.browse(cr, uid, ids, context=context):
-			if obj.type =='issue':
-				same_number_check_ids = self.search(cr, uid, [('id','!=',obj.id),('number','=',obj.number),('checkbook_id','=',obj.checkbook_id.id)], context=context)
-				if same_number_check_ids:
-					return False
-		return True
+    # Third check
+    third_handed_voucher_id = fields.Many2one(
+        'account.voucher', 'Handed Voucher', readonly=True,)
+    source_partner_id = fields.Many2one(
+        'res.partner',
+        compute='_get_source_partner',
+        string='Source Partner',
+        store=True,
+        )
+    customer_reject_debit_note_id = fields.Many2one(
+        'account.invoice',
+        'Customer Reject Debit Note',
+        readonly=True,
+        copy=False
+        )
+    bank_id = fields.Many2one(
+        'res.bank', 'Bank',
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+        )
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        readonly=True,
+        related='voucher_id.journal_id.currency',
+        )
+    vat = fields.Char(
+        # TODO rename to Owner VAT
+        'Owner Vat',
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+        )
+    owner_name = fields.Char(
+        'Owner Name',
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+        )
+    deposit_account_move_id = fields.Many2one(
+        'account.move',
+        'Deposit Account Move',
+        readonly=True,
+        copy=False
+        )
+    # account move of return
+    return_account_move_id = fields.Many2one(
+        'account.move',
+        'Return Account Move',
+        readonly=True,
+        copy=False
+        )
 
-	def _check_number_third(self, cr, uid, ids, context=None):
-		for obj in self.browse(cr, uid, ids, context=context):
-			if obj.type =='third':
-				same_number_check_ids = self.search(cr, uid, [('id','!=',obj.id),('number','=',obj.number),('voucher_id.partner_id','=',obj.voucher_id.partner_id.id)], context=context)
-				if same_number_check_ids:
-					return False
-		return True
+    def _check_number_interval(self, cr, uid, ids, context=None):
+        for obj in self.browse(cr, uid, ids, context=context):
+            if obj.type != 'issue_check' or (
+                    obj.checkbook_id and
+                    obj.checkbook_id.range_from <= obj.number <=
+                    obj.checkbook_id.range_to):
+                return True
+        return False
 
-	_constraints = [
-		(_check_number_interval, 'Check Number Must be in Checkbook interval!', ['number','checkbook_id']),
-		(_check_number_issue, 'Check Number must be unique per Checkbook!', ['number','checkbook_id']),
-		(_check_number_third, 'Check Number must be unique per Customer and Bank!', ['number','bank_id']),
-	]
+    def _check_number_issue(self, cr, uid, ids, context=None):
+        for obj in self.browse(cr, uid, ids, context=context):
+            if obj.type == 'issue_check':
+                same_number_check_ids = self.search(
+                    cr, uid, [
+                        ('id', '!=', obj.id),
+                        ('number', '=', obj.number),
+                        ('checkbook_id', '=', obj.checkbook_id.id)],
+                    context=context)
+                if same_number_check_ids:
+                    return False
+        return True
 
-	def _get_checkbook_id(self, cr, uid, context=None):
-		res={}
-		if context is None:
-			context = {}
-		journal_id = context.get('default_journal_id', False)
-		check_type = context.get('default_type',False)
-		if journal_id and check_type == 'issue':
-			checkbook_pool = self.pool.get('account.checkbook')
-			res = checkbook_pool.search(cr, uid, [('state', '=', 'active'),('journal_id', '=', journal_id)],)
-			if res:
-				return res[0]
-		else:
-			return False
+    def _check_number_third(self, cr, uid, ids, context=None):
+        for obj in self.browse(cr, uid, ids, context=context):
+            if obj.type == 'third_check':
+                same_number_check_ids = self.search(
+                    cr, uid, [
+                        ('id', '!=', obj.id),
+                        ('number', '=', obj.number),
+                        ('voucher_id.partner_id', '=',
+                            obj.voucher_id.partner_id.id)], context=context)
+                if same_number_check_ids:
+                    return False
+        return True
 
-	_defaults = {
-		'state': 'draft',
-		'issue_date': lambda *a: time.strftime('%Y-%m-%d'),
-		'user_id': lambda s, cr, u, c: u,
-		'checkbook_id': _get_checkbook_id,
-	}
-  
-	def onchange_date(self, cr, uid, ids, issue_date, payment_date, context=None):
-		res = {}
-		if issue_date and payment_date and issue_date > payment_date:
-			res = {'value':{'payment_date': False}}
-			res.update({'warning': {'title': _('Error !'), 'message': _('Payment Date must be greater than Issue Date')}})
-		return res
+    _constraints = [
+        (_check_number_issue,
+            'Check Number must be unique per Checkbook!',
+            ['number', 'checkbook_id', 'type']),
+        (_check_number_third,
+            'Check Number must be unique per Owner and Bank!',
+            ['number', 'bank_id', 'owner_name', 'type']),
+    ]
 
-	def onchange_vat(self, cr, uid, ids, vat, context=None):
-		res = {}
-		if not vat:
-			res.update({'warning': {'title': _('Error !'), 'message': _('Vat number must be not null !')}})
-		else:
-			if len(vat) != 11:
-				res = {'value':{'vat': None}}
-				res.update({'warning': {'title': _('Error !'), 'message': _('Vat number must be 11 numbers !')}})
-			else:
-				res = {'value':{'vat': vat}}
-		return res
+    @api.one
+    @api.onchange('issue_date', 'payment_date')
+    def onchange_date(self):
+        if (
+                self.issue_date and self.payment_date and
+                self.issue_date > self.payment_date):
+            self.payment_date = False
+            raise Warning(
+                _('Payment Date must be greater than Issue Date'))
 
-	def unlink(self, cr, uid, ids, context=None):
-		for record in self.browse(cr,uid,ids,context=context):
-			if  record.state not in ('draft'):
-				raise osv.except_osv(_('Error !'), _('The Check must be in draft state for unlink !'))
-				return False
-		return super(account_check, self).unlink(cr, uid, ids, context=context)
+    @api.one
+    @api.onchange('voucher_id')
+    def onchange_voucher(self):
+        self.owner_name = self.voucher_id.partner_id.name
+        self.vat = self.voucher_id.partner_id.vat
 
-	def onchange_checkbook_id(self, cr, uid, ids, checkbook_id, context=None):
-		values = {}
-		checkbook_obj = self.pool.get('account.checkbook')
-		number = False
-		issue_check_subtype = False
-		if checkbook_id:
-			checkbook = checkbook_obj.browse(cr, uid, checkbook_id, context=context)
-			number = checkbook.next_check_number
-			issue_check_subtype = checkbook.issue_check_subtype
-		values = {
-			'number': number,
-			'issue_check_subtype': issue_check_subtype,
-			}
-		return {'value':values}
+    @api.one
+    def unlink(self):
+        if self.state not in ('draft'):
+            raise Warning(
+                _('The Check must be in draft state for unlink !'))
+        return super(account_check, self).unlink()
 
-	def action_cancel_draft(self, cr, uid, ids, *args):
-		self.write(cr, uid, ids, {'state':'draft'})
-		wf_service = netsvc.LocalService("workflow")
-		for check_id in ids:
-			wf_service.trg_delete(uid, self._name, check_id, cr)
-			wf_service.trg_create(uid, self._name, check_id, cr)
-		#self.delete_workflow(cr, uid, ids)
-		#self.create_workflow(cr, uid, ids)
+    @api.one
+    @api.onchange('checkbook_id')
+    def onchange_checkbook(self):
+        if self.checkbook_id:
+            self.number = self.checkbook_id.next_check_number
 
-	def action_hold(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'holding',
-				 })
-		return True
+    @api.multi
+    def action_cancel_draft(self):
+        # go from canceled state to draft state
+        self.write({'state': 'draft'})
+        self.delete_workflow()
+        self.create_workflow()
+        return True
 
-	def action_deposit(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'deposited',
-				 })
-		return True
+    @api.multi
+    def action_hold(self):
+        self.write({'state': 'holding'})
+        return True
 
-	def action_hand(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'handed',
-				 })
-		return True
+    @api.multi
+    def action_deposit(self):
+        self.write({'state': 'deposited'})
+        return True
 
-	def action_reject(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'rejected',
-				 })
-		return True
+    @api.multi
+    def action_return(self):
+        self.write({'state': 'returned'})
+        return True
 
-	def action_debit(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'debited',
-				 })
-		return True
+    @api.multi
+    def action_change(self):
+        self.write({'state': 'changed'})
+        return True
 
-	def action_cancel_rejection(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			if check.customer_reject_debit_note_id:
-				raise osv.except_osv(_('Error !'), _('To cancel a rejection you must first delete the customer reject debit note!'))
-			if check.supplier_reject_debit_note_id:
-				raise osv.except_osv(_('Error !'), _('To cancel a rejection you must first delete the supplier reject debit note!'))
-			if check.expense_account_move_id:
-				raise osv.except_osv(_('Error !'), _('To cancel a rejection you must first delete Expense Account Move!'))
-			print 'check', check
-			check._workflow_signal('cancel_rejection')
-		return True
+    @api.multi
+    def action_hand(self):
+        self.write({'state': 'handed'})
+        return True
 
-	def action_cancel_debit(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			if check.debit_account_move_id:
-				raise osv.except_osv(_('Error !'), _('To cancel a debit you must first delete Debit Account Move!'))
-			check._workflow_signal('debited_handed')
-		return True
+    @api.multi
+    def action_reject(self):
+        self.write({'state': 'rejected'})
+        return True
 
-	def action_cancel_deposit(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			if check.deposit_account_move_id:
-				raise osv.except_osv(_('Error !'), _('To cancel a deposit you must first delete the Deposit Account Move!'))
-			check._workflow_signal('cancel_deposit')
-		return True
+    @api.multi
+    def action_debit(self):
+        self.write({'state': 'debited'})
+        return True
 
-	def action_cancel(self, cr, user, ids, context=None):
-		for check in self.browse(cr, user, ids):
-			check.write({
-				'state': 'cancel',})
-		return True
+    @api.multi
+    def action_cancel_rejection(self):
+        for check in self:
+            if check.customer_reject_debit_note_id:
+                raise Warning(_(
+                    'To cancel a rejection you must first delete the customer '
+                    'reject debit note!'))
+            if check.supplier_reject_debit_note_id:
+                raise Warning(_(
+                    'To cancel a rejection you must first delete the supplier '
+                    'reject debit note!'))
+            if check.expense_account_move_id:
+                raise Warning(_(
+                    'To cancel a rejection you must first delete Expense '
+                    'Account Move!'))
+            check.signal_workflow('cancel_rejection')
+        return True
 
+    @api.multi
+    def action_cancel_debit(self):
+        for check in self:
+            if check.debit_account_move_id:
+                raise Warning(_(
+                    'To cancel a debit you must first delete Debit '
+                    'Account Move!'))
+            check.signal_workflow('debited_handed')
+        return True
+
+    @api.multi
+    def action_cancel_deposit(self):
+        for check in self:
+            if check.deposit_account_move_id:
+                raise Warning(_(
+                    'To cancel a deposit you must first delete the Deposit '
+                    'Account Move!'))
+            check.signal_workflow('cancel_deposit')
+        return True
+
+    @api.multi
+    def action_cancel_return(self):
+        for check in self:
+            if check.return_account_move_id:
+                raise Warning(_(
+                    'To cancel a deposit you must first delete the Return '
+                    'Account Move!'))
+            check.signal_workflow('cancel_return')
+        return True
+
+    # TODO implementar para caso issue y third
+    # @api.multi
+    # def action_cancel_change(self):
+    #     for check in self:
+    #         if check.replacing_check_id:
+    #             raise Warning(_(
+    #                 'To cancel a return you must first delete the replacing '
+    #                 'check!'))
+    #         check.signal_workflow('cancel_change')
+    #     return True
+
+    @api.multi
+    def check_check_cancellation(self):
+        for check in self:
+            if check.type == 'issue_check' and check.state not in [
+                    'draft', 'handed']:
+                raise Warning(_(
+                    'You can not cancel issue checks in states other than '
+                    '"draft or "handed". First try to change check state.'))
+            # third checks received
+            elif check.type == 'third_check' and check.state not in [
+                    'draft', 'holding']:
+                raise Warning(_(
+                    'You can not cancel third checks in states other than '
+                    '"draft or "holding". First try to change check state.'))
+            elif check.type == 'third_check' and check.third_handed_voucher_id:
+                raise Warning(_(
+                    'You can not cancel third checks that are being used on '
+                    'payments'))
+        return True
+
+    @api.multi
+    def action_cancel(self):
+        self.write({'state': 'cancel'})
+        return True

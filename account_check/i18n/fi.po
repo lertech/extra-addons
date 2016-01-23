@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: odoo-addons (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-02 18:20+0000\n"
-"PO-Revision-Date: 2015-10-22 21:00+0000\n"
+"PO-Revision-Date: 2015-10-22 21:05+0000\n"
 "Last-Translator: Juan Jose Scarafia <scarafia.juanjose@gmail.com>\n"
-"Language-Team: Spanish (Venezuela) (http://www.transifex.com/adhoc/ingadhoc-odoo-addons-8-0/language/es_VE/)\n"
+"Language-Team: Finnish (http://www.transifex.com/adhoc/ingadhoc-odoo-addons-8-0/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es_VE\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_check
@@ -78,7 +78,7 @@ msgstr ""
 #: view:account.change.check:account_check.account_change_check_form_view
 #: selection:account.check,state:0
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Peruuta"
 
 #. module: account_check
 #: view:account.check:account_check.view_account_check_form
@@ -223,7 +223,7 @@ msgstr ""
 #: field:account.check.dreject,create_uid:0
 #: field:account.checkbook,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Luonut"
 
 #. module: account_check
 #: field:account.change.check,create_date:0 field:account.check,create_date:0
@@ -231,7 +231,7 @@ msgstr ""
 #: field:account.check.dreject,create_date:0
 #: field:account.checkbook,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Luotu"
 
 #. module: account_check
 #: selection:account.checkbook,issue_check_subtype:0
@@ -312,7 +312,7 @@ msgstr ""
 #. module: account_check
 #: selection:account.check,state:0 selection:account.checkbook,state:0
 msgid "Draft"
-msgstr "Borrador"
+msgstr "Luonnos"
 
 #. module: account_check
 #: field:account.check.dreject,expense_account:0
@@ -343,7 +343,7 @@ msgstr ""
 #. module: account_check
 #: view:account.check:account_check.view_checks_search
 msgid "Group By..."
-msgstr "Agrupar por..."
+msgstr "Ryhmittely.."
 
 #. module: account_check
 #: selection:account.check,state:0
@@ -378,7 +378,7 @@ msgstr ""
 #: field:account.check.action,id:0 field:account.check.dreject,id:0
 #: field:account.checkbook,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_check
 #: help:account.check,message_unread:0 help:account.checkbook,message_unread:0
@@ -473,7 +473,7 @@ msgstr ""
 #: field:account.check.action,write_uid:0
 #: field:account.check.dreject,write_uid:0 field:account.checkbook,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Viimeksi päivittänyt"
 
 #. module: account_check
 #: field:account.change.check,write_date:0 field:account.check,write_date:0
@@ -481,7 +481,7 @@ msgstr ""
 #: field:account.check.dreject,write_date:0
 #: field:account.checkbook,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Viimeksi päivitetty"
 
 #. module: account_check
 #: field:account.check,message_ids:0 field:account.checkbook,message_ids:0
@@ -496,7 +496,7 @@ msgstr ""
 #. module: account_check
 #: field:account.checkbook,name:0
 msgid "Name"
-msgstr "Nombre"
+msgstr "Nimi"
 
 #. module: account_check
 #: code:addons/account_check/models/account_checkbook.py:61
@@ -799,7 +799,7 @@ msgstr ""
 #. module: account_check
 #: field:account.check,user_id:0
 msgid "User"
-msgstr "Usuario"
+msgstr "Käyttäjä"
 
 #. module: account_check
 #: field:account.check,voucher_id:0
@@ -882,7 +882,7 @@ msgstr ""
 #. module: account_check
 #: view:account.change.check:account_check.account_change_check_form_view
 msgid "or"
-msgstr ""
+msgstr "tai"
 
 #. module: account_check
 #: view:account.voucher:account_check.view_vendor_payment_check_form
