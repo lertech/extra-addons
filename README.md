@@ -16,6 +16,8 @@ addon | version | summary
 [l10n_ve_bank](l10n_ve_bank/) | 8.0.1.0.0 |  List Bank of Venezuelan
 [account_voucher_payline](account_voucher_payline/) | 8.0.1.2.1 |  Module that modifies account voucher so that you can extend this module
 [account_journal_payment_subtype](account_journal_payment_subtype/) | 8.0.1.0.1 |  Adds payment subtype field to cash and bank journals.
+[network](network/) | 8.0.1.0.6 |  Hardware Administration, Server Management
+[network_account_invoicing](network_account_invoicing/) | 8.0.1.0.0 |  Hardware Administration linked with invoicing.
 
 Unported addons
 ---------------
