@@ -20,29 +20,63 @@
 #
 ##############################################################################
 {
-    'name': 'Network Management',
-    'version': '1.0.6',
-    'author': 'Tiny & Vauxoo',
-    'category': 'Enterprise Specific Modules/Information Technology',
-    'depends': [
-                'base',
-                'project', #Because a change in hardware or update MUST be a task.
-                ],
-    'description': """
+    "name": "Network Management",
+    "version": "1.0.6",
+    "author": "Vauxoo",
+    "category": "Hardware Administration",
+    "summary": "Hardware Administration, Server Management",
+    "depends": [
+        "base",
+        "mail",
+        "project", #Because a change in hardware or update MUST be a task.
+        ],
+    "description": """
 A simple module to encode your networks and materials:
 
-    - networks and connections between networks
-    - hardwares and softwares with:
-        - versions, access rights, waranties
-You can print interventions form for technical people.""",
-    'demo': ['demo/network_demo.xml'],
-    'data': [
-        'security/network_security.xml',
-        'security/ir.model.access.csv',
-        'view/network_view.xml',
-        'data/network_report.xml'
-    ],
-    'active': False,
-    'installable': True,
+- Networks and connections between networks
+- Hardwares and softwares with:
+    - Versions
+    - Access rights
+    - Waranties.
+- You can print interventions form for technical people.
+
+Organize your software and configurations.
+
+    - Additional network information: IP, domain, DNS, gateway
+    - Protocols
+    - Services
+    - Ports
+    - Public and private URLs
+    - Password encryption
+
+System dependency: package python-crypto required.
+
+Credits:
+--------
+
+Special thanks to Odoo SA for give the first models of this modules for V5.0.
+and to Zikzakmedia.
+    """,
+    "demo": [
+        "demo/network_demo.xml"
+        ],
+    "data": [
+        "data/module_data.xml",
+        "data/network_data.xml",
+        'data/network_protocol_data.xml',
+        "security/network_security.xml",
+        "security/ir.model.access.csv",
+        "view/network_network_view.xml",
+        "view/network_material_view.xml",
+        "view/network_software_view.xml",
+        "view/network_service_view.xml",
+        "view/network_hardware_view.xml",
+        "view/network_protocol_view.xml",
+        "view/network_encrypt_view.xml",
+        "report/network_report.xml",
+        ],
+    "active": False,
+    "application": True,
+    "installable": True,
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
