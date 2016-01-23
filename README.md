@@ -19,6 +19,7 @@ addon | version | summary
 [network](network/) | 8.0.1.0.6 |  Hardware Administration, Server Management
 [network_account_invoicing](network_account_invoicing/) | 8.0.1.0.0 |  Hardware Administration linked with invoicing.
 [product_historical_price](product_historical_price/) | 8.0.0.6.0 |  Product Historical Price
+[project_sla](project_sla/) | 8.0.1.0.0 |  Define SLAs for your Contracts
 
 Unported addons
 ---------------
