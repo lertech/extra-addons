@@ -19,28 +19,37 @@
 #
 ##############################################################################
 
-import equipment
-import equipment_worklog
-import equipment_component
-import equipment_network
-import equipment_rule
-import equipment_nat
-import equipment_forward
-import equipment_partition
-import equipment_db
-import equipment_ipreservation
-import equipment_dbsetting
-import equipment_dcuser
-import equipment_dcgroup
-import equipment_firewallfilter
-import equipment_configuration
-import equipment_function
-import equipment_mapping
-import backup
-import access
-import application
-import application_license
-import partner
+import logging
+import time
+from openerp import tools, addons
+from openerp.osv import fields, osv
 
+_logger = logging.getLogger(__name__)
+
+class it_equipment_configuration(osv.osv):
+
+    _name = 'it.equipment.configuration'
+
+    _description = 'Equipment Configuration'
+
+    _order = 'date desc'
+
+    _columns = {
+
+        'name': fields.char('Description', size=64, required=True),
+        'date': fields.datetime('Date'),
+        'config_file': fields.binary('Configuration File', filename="config_file_filename"),
+        'config_file_filename': fields.char('Configuration File Filename'),
+        'equipment_id': fields.many2one('it.equipment','Equipment', ondelete='cascade'),
+
+    }
+
+    _defaults = {
+
+        'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
+
+    }
+
+it_equipment_configuration()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

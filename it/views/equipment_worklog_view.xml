@@ -21,37 +21,40 @@
 
     <data>
 
-        <!-- Create view for changes -->
-        <record model="ir.ui.view" id="it_equipment_component_form">
-            <field name="name">it.equipment.component.form</field>
-            <field name="model">it.equipment.component</field>
+        <!-- Create view for worklogs -->
+        <record model="ir.ui.view" id="it_equipment_worklog_form">
+            <field name="name">it.equipment.worklog.form</field>
+            <field name="model">it.equipment.worklog</field>
             <field name="arch" type="xml">
-                <form string="Enter a component">
-                    <separator string="Component entry" colspan="4" />
+                <form string="Worklog">
                     <group>
-                        <field name="product_id"/>
-                        <field name="serial_number"/>
-                        <field name="partner_id"/>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="spent_time" widget="float_time"/>
+                        <field name="user_id"/>
                     </group>
-                    <field name="note" colspan="4" nolabel="1" placeholder="Write a note ..."/>
+                    <separator string="Description" colspan="4"/>
+                    <field name="description" colspan="4" nolabel="1"/>
                 </form>
             </field>
         </record>
 
-        <!-- Tree view for changes grill on equipments -->
-        <record model="ir.ui.view" id="it_equipment_component_tree">
-            <field name="name">it.equipment.component.tree</field>
-            <field name="model">it.equipment.component</field>
+        <!-- Tree view for worklogs grill on equipments -->
+        <record model="ir.ui.view" id="it_equipment_worklog_tree">
+            <field name="name">it.equipment.worklog.tree</field>
+            <field name="model">it.equipment.worklog</field>
             <field name="arch" type="xml">
-                <tree string="Components">
-                    <field name="product_id"/>
-                    <field name="serial_number"/>
-                    <field name="partner_id"/>
+                <tree string="Worklogs">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="spent_time" widget="float_time"/>
+                    <field name="user_id"/>
                 </tree>
             </field>
         </record>
 
     </data>
+
 </openerp>
 
 <!-- vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4-->

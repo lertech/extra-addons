@@ -19,28 +19,39 @@
 #
 ##############################################################################
 
-import equipment
-import equipment_worklog
-import equipment_component
-import equipment_network
-import equipment_rule
-import equipment_nat
-import equipment_forward
-import equipment_partition
-import equipment_db
-import equipment_ipreservation
-import equipment_dbsetting
-import equipment_dcuser
-import equipment_dcgroup
-import equipment_firewallfilter
-import equipment_configuration
-import equipment_function
-import equipment_mapping
-import backup
-import access
-import application
-import application_license
-import partner
+from openerp import addons
+import logging
+import time
+from openerp.osv import fields, osv
+from openerp import tools
+_logger = logging.getLogger(__name__)
 
+class it_equipment_worklog(osv.osv):
+
+    _name = 'it.equipment.worklog'
+
+    _description = 'Equipment Worklog'
+
+    _order = 'date desc'
+
+    _columns = {
+
+        'name': fields.char('Short Description', size=64, required=True),
+        'description': fields.text('Long Description'),
+        'date': fields.datetime('Date'),
+        'spent_time': fields.float('Spent Time'),
+        'equipment_id': fields.many2one('it.equipment','Equipment', ondelete='cascade'),
+        'user_id': fields.many2one('res.users', 'User', required=True),
+
+    }
+
+    _defaults = {
+
+        'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
+        'user_id': lambda self, cr, uid, ctx: uid,
+
+    }
+
+it_equipment_worklog()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
