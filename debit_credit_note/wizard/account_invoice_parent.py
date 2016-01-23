@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 ##############################################################################
 #
 # Copyright (c) 2010 Vauxoo C.A. (http://openerp.com.ve/) All Rights Reserved.
@@ -27,7 +26,7 @@ from openerp.tools.translate import _
 from lxml import etree
 
 
-class account_invoice_parent(osv.osv_memory):
+class AccountInvoiceParent(osv.osv_memory):
 
     """Assign parent to invoice"""
 
@@ -38,7 +37,7 @@ class account_invoice_parent(osv.osv_memory):
         'sure': fields.boolean('Are you sure?'),
         'partner_id': fields.many2one('res.partner', 'Partner', help='Customer or supplier who owns the invoice'),
         'type': fields.selection([('modify', 'Change source invoice')], "Operation Type", help='Operation to make on the refund invoice or debit credit note.\n'
-                'Change source invoice: Modify the current parent invoice of the current invoice.'),
+                                 'Change source invoice: Modify the current parent invoice of the current invoice.'),
     }
 
     def _get_partner(self, cr, uid, context=None):
@@ -49,7 +48,8 @@ class account_invoice_parent(osv.osv_memory):
             context = {}
         partner_id = False
         if context.get('active_id', False):
-            partner_id = inv_obj.browse(cr, uid, context['active_id']).partner_id.id
+            partner_id = inv_obj.browse(
+                cr, uid, context['active_id']).partner_id.id
         return partner_id
 
     _defaults = {
@@ -62,7 +62,8 @@ class account_invoice_parent(osv.osv_memory):
         """
         if context is None:
             context = {}
-        res = super(account_invoice_parent, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
+        res = super(AccountInvoiceParent, self).fields_view_get(cr, uid, view_id=view_id,
+                                                                view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
         if view_type == 'form':
             doc = etree.XML(res['arch'])
             nodes = doc.xpath("//field[@name='partner_id']")
@@ -79,7 +80,9 @@ class account_invoice_parent(osv.osv_memory):
             if context.get('op_type', False) in ('modify', 'assigned'):
                 parent_invisible = 'False'
                 state_lst = ['open', 'paid']
-                domain = '[("partner_id", "=", ' + str(context.get('partner_id', False)) + '),("id", "!=", ' + str(context.get('active_id', False)) + '),("state", "in", ' + str(state_lst) + ')]'
+                domain = '[("partner_id", "=", ' + str(context.get('partner_id', False)) + '),("id", "!=", ' + \
+                    str(context.get('active_id', False)) + \
+                    '),("state", "in", ' + str(state_lst) + ')]'
                 required = str(True)
             for node in nodes:
                 node.set('invisible', parent_invisible)
@@ -104,7 +107,8 @@ class account_invoice_parent(osv.osv_memory):
     def default_get(self, cr, uid, fields, context=None):
         """ Change value for default of the type field
         """
-        res = super(account_invoice_parent, self).default_get(cr, uid, fields, context=context)
+        res = super(AccountInvoiceParent, self).default_get(
+            cr, uid, fields, context=context)
         if context.get('op_type', False):
             res.update({'type': context.get('op_type', 'modify')})
         return res
@@ -125,7 +129,8 @@ class account_invoice_parent(osv.osv_memory):
         result = act_obj.read(cr, uid, id, context=context)
         # we add the new context into context dictionary
         invoice_context = eval(result['context'])
-        invoice_context.update({'op_type': op_type, 'partner_id': partner_id, 'parent_id': parent_id})
+        invoice_context.update(
+            {'op_type': op_type, 'partner_id': partner_id, 'parent_id': parent_id})
         result['context'] = invoice_context
         return result
 
@@ -133,7 +138,8 @@ class account_invoice_parent(osv.osv_memory):
         """ Checks if the user is sure
         """
         if not ok:
-            raise osv.except_osv(_('User Error'), _('Assign parent invoice, Please check the box to confirm that you agree!'))
+            raise osv.except_osv(_('User Error'), _(
+                'Assign parent invoice, Please check the box to confirm that you agree!'))
         return True
 
     def check_recursion(self, cr, uid, ids, child_id, parent_id, context=None):
@@ -142,7 +148,8 @@ class account_invoice_parent(osv.osv_memory):
         @param parent_id: parent id
         """
         if child_id == parent_id:
-            raise osv.except_osv(_('User Error'), _('Current invoice is the same father invoice, Credit or debit note have to be diferent of parent invoice, Please choise another one!'))
+            raise osv.except_osv(_('User Error'), _(
+                'Current invoice is the same father invoice, Credit or debit note have to be diferent of parent invoice, Please choise another one!'))
         return True
 
     def check_grandfather(self, cr, uid, ids, parent_id, context=None):
@@ -152,7 +159,8 @@ class account_invoice_parent(osv.osv_memory):
         inv_obj = self.pool.get('account.invoice')
         inv_parent_brw = inv_obj.browse(cr, uid, parent_id, context=context)
         if inv_parent_brw.parent_id:
-            raise osv.except_osv(_('User Error'), _('Incorrect Parent Invoice, The parent invoice selected can not have an assigned parent invoice!'))
+            raise osv.except_osv(_('User Error'), _(
+                'Incorrect Parent Invoice, The parent invoice selected can not have an assigned parent invoice!'))
         return True
 
     def action_assigned(self, cr, uid, ids, form, context=None):
@@ -168,13 +176,16 @@ class account_invoice_parent(osv.osv_memory):
         inv_brw = inv_obj.browse(cr, uid, active_id, context=context)
 
         if inv_brw.parent_id:
-            raise osv.except_osv(_('User Error'), _('Credit or debit note assign, This credit or debit note already assign to an invoice!'))
+            raise osv.except_osv(_('User Error'), _(
+                'Credit or debit note assign, This credit or debit note already assign to an invoice!'))
         if parent_id:
             self.check_grandfather(cr, uid, ids, parent_id, context)
-            inv_obj.write(cr, uid, active_id, {'parent_id': parent_id}, context=context)
+            inv_obj.write(cr, uid, active_id, {
+                          'parent_id': parent_id}, context=context)
             return {}
 
-        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent', 'l10n_ve_fiscal_requirements', 'assigned', partner_id, parent_id)
+        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent',
+                                 'l10n_ve_fiscal_requirements', 'assigned', partner_id, parent_id)
 
         return result
 
@@ -190,10 +201,12 @@ class account_invoice_parent(osv.osv_memory):
         inv_brw = inv_obj.browse(cr, uid, active_id, context=context)
 
         if inv_brw.parent_id:
-            inv_obj.write(cr, uid, active_id, {'parent_id': False}, context=context)
+            inv_obj.write(cr, uid, active_id, {
+                          'parent_id': False}, context=context)
             return {}
 
-        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent', 'l10n_ve_fiscal_requirements', 'unlink', partner_id, parent_id)
+        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent',
+                                 'l10n_ve_fiscal_requirements', 'unlink', partner_id, parent_id)
         return result
 
     def action_modify(self, cr, uid, ids, form, context=None):
@@ -210,10 +223,12 @@ class account_invoice_parent(osv.osv_memory):
 
         if parent_id:
             self.check_grandfather(cr, uid, ids, parent_id, context)
-            inv_obj.write(cr, uid, active_id, {'parent_id': parent_id}, context=context)
+            inv_obj.write(cr, uid, active_id, {
+                          'parent_id': parent_id}, context=context)
             return {}
 
-        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent', 'l10n_ve_fiscal_requirements', 'modify', partner_id, parent_id)
+        result = self.get_window(cr, uid, ids, 'action_account_invoice_parent',
+                                 'l10n_ve_fiscal_requirements', 'modify', partner_id, parent_id)
         return result
 
     def invoice_operation(self, cr, uid, ids, context=None):
@@ -227,8 +242,3 @@ class account_invoice_parent(osv.osv_memory):
         operation_method = getattr(self, "action_%s" % data['type'])
 
         return operation_method(cr, uid, ids, data, context=context)
-
-
-account_invoice_parent()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
