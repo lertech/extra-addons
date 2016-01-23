@@ -22,9 +22,8 @@ from openerp.osv import fields, orm
 from openerp.tools.safe_eval import safe_eval
 from openerp.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT as DT_FMT
 from openerp import SUPERUSER_ID
-from datetime import timedelta
 from datetime import datetime as dt
-import m2m
+from . import m2m
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -92,11 +91,11 @@ class SLAControl(orm.Model):
         new_state = vals.get('sla_state')
         if new_state:
             # just update sla_state without recomputing the whole thing
-            context = context or {}
-            context['__sla_stored__'] = 1
-            for sla in self.browse(cr, uid, ids, context=context):
+            ctx = dict(context) if context else {}
+            ctx['__sla_stored__'] = 1
+            for sla in self.browse(cr, uid, ids, context=ctx):
                 doc = self.pool.get(sla.doc_model).browse(
-                    cr, uid, sla.doc_id, context=context)
+                    cr, uid, sla.doc_id, context=ctx)
                 if doc.sla_state < new_state:
                     doc.write({'sla_state': new_state})
         return res
@@ -109,7 +108,7 @@ class SLAControl(orm.Model):
           - exceeded warning dates are set to "warning"
         To be used by a scheduled job.
         """
-        now = dt.now().strftime(DT_FMT)
+        now = dt.strftime(dt.now(), DT_FMT)
         # SLAs to mark as "will fail"
         control_ids = self.search(
             cr, uid,
@@ -124,42 +123,27 @@ class SLAControl(orm.Model):
         self.write(cr, uid, control_ids, {'sla_state': '3'}, context=context)
         return True
 
-    def _compute_sla_date(self, cr, uid, working_hours, res_uid,
+    def _compute_sla_date(self, cr, uid, calendar_id, resource_id,
                           start_date, hours, context=None):
         """
         Return a limit datetime by adding hours to a start_date, honoring
         a working_time calendar and a resource's (res_uid) timezone and
         availability (leaves)
-
-        Currently implemented using a binary search using
-        _interval_hours_get() from resource.calendar. This is
-        resource.calendar agnostic, but could be more efficient if
-        implemented based on it's logic.
-
-        Known issue: the end date can be a non-working time; it would be
-        best for it to be the latest working time possible. Example:
-        if working time is 08:00 - 16:00 and start_date is 19:00, the +8h
-        end date will be 19:00 of the next day, and it should rather be
-        16:00 of the next day.
         """
         assert isinstance(start_date, dt)
         assert isinstance(hours, int) and hours >= 0
 
         cal_obj = self.pool.get('resource.calendar')
-        target, step = hours * 3600, 16 * 3600
-        lo, hi = start_date, start_date
-        while target > 0 and step > 60:
-            hi = lo + timedelta(seconds=step)
-            check = int(3600 * cal_obj._interval_hours_get(
-                cr, uid, working_hours, lo, hi,
-                timezone_from_uid=res_uid, exclude_leaves=False,
-                context=context))
-            if check <= target:
-                target -= check
-                lo = hi
-            else:
-                step = int(step / 4.0)
-        return hi
+        periods = cal_obj._schedule_hours(
+            cr, uid, calendar_id,
+            hours,
+            day_dt=start_date,
+            compute_leaves=True,
+            resource_id=resource_id,
+            default_interval=(8, 16),
+            context=context)
+        end_date = periods[-1][1]
+        return end_date
 
     def _get_computed_slas(self, cr, uid, doc, context=None):
         """
@@ -187,9 +171,16 @@ class SLAControl(orm.Model):
                    safe_getattr(doc, 'project_id.analytic_account_id.sla_ids'))
         if not sla_ids:
             return res
+        cal_id = safe_getattr(doc, 'project_id.resource_calendar_id')
+        if not cal_id:
+            _logger.debug('Project %s has no calendar!', doc.project_id.name)
+            return []
+        if not cal_id.attendance_ids:
+            _logger.debug('Calendar %s has no work periods!', cal_id.name)
+            return []
 
         for sla in sla_ids:
-            if sla.control_model != doc._table_name:
+            if sla.control_model != doc._name:
                 continue  # SLA not for this model; skip
 
             for l in sla.sla_line_ids:
@@ -200,11 +191,12 @@ class SLAControl(orm.Model):
                     cal = safe_getattr(
                         doc, 'project_id.resource_calendar_id.id')
                     warn_date = self._compute_sla_date(
-                        cr, uid, cal, res_uid, start_date, l.warn_qty,
+                        cr, uid, cal, res_uid,
+                        start_date, l.warn_qty,
                         context=context)
                     lim_date = self._compute_sla_date(
-                        cr, uid, cal, res_uid, warn_date,
-                        l.limit_qty - l.warn_qty,
+                        cr, uid, cal, res_uid,
+                        warn_date, l.limit_qty - l.warn_qty,
                         context=context)
                     # evaluate sla state
                     control_val = getattr(doc, sla.control_field_id.name)
@@ -237,8 +229,8 @@ class SLAControl(orm.Model):
                     break
 
         if sla_ids and not res:
-            _logger.warning("No valid SLA rule found for %d, SLA Ids %s"
-                            % (doc.id, repr([x.id for x in sla_ids])))
+            _logger.warning("No valid SLA rule foun for %d, SLA Ids %s",
+                            doc.id, repr([x.id for x in sla_ids]))
         return res
 
     def store_sla_control(self, cr, uid, docs, context=None):
@@ -251,15 +243,16 @@ class SLAControl(orm.Model):
         if '__sla_stored__' in context:
             return False
         else:
-            context['__sla_stored__'] = 1
+            ctx = dict(context)
+            ctx['__sla_stored__'] = 1
 
         res = []
         for ix, doc in enumerate(docs):
             if ix and ix % 50 == 0:
-                _logger.info('...%d SLAs recomputed for %s' % (ix, doc._name))
+                _logger.info('...%d SLAs recomputed for %s', ix, doc._name)
             control = {x.sla_line_id.id: x
                        for x in doc.sla_control_ids}
-            sla_recs = self._get_computed_slas(cr, uid, doc, context=context)
+            sla_recs = self._get_computed_slas(cr, uid, doc, context=ctx)
             # calc sla control lines
             if sla_recs:
                 slas = []
@@ -271,16 +264,14 @@ class SLAControl(orm.Model):
                             slas += m2m.write(control_rec.id, sla_rec)
                     else:
                         slas += m2m.add(sla_rec)
+                global_sla = max([sla[2].get('sla_state') for sla in slas])
             else:
                 slas = m2m.clear()
-            # calc sla control summary
-            vals = {'sla_state': None, 'sla_control_ids': slas}
-            if sla_recs and doc.sla_control_ids:
-                vals['sla_state'] = max(
-                    x.sla_state for x in doc.sla_control_ids)
-            # store sla
+                global_sla = None
+            # calc sla control summary and store
+            vals = {'sla_state': global_sla, 'sla_control_ids': slas}
             doc._model.write(  # regular users can't write on SLA Control
-                cr, SUPERUSER_ID, [doc.id], vals, context=context)
+                cr, SUPERUSER_ID, [doc.id], vals, context=ctx)
         return res
 
 
@@ -308,8 +299,7 @@ class SLAControlled(orm.AbstractModel):
         res = super(SLAControlled, self).write(
             cr, uid, ids, vals, context=context)
         docs = [x for x in self.browse(cr, uid, ids, context=context)
-                if (x.state != 'cancelled') and
-                   (x.state != 'done' or x.sla_state not in ['1', '5'])]
+                if (not x.stage_id.fold or x.sla_state not in ['1', '5'])]
         self.pool.get('project.sla.control').store_sla_control(
             cr, uid, docs, context=context)
         return res

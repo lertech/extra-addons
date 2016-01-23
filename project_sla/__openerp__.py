@@ -20,7 +20,7 @@
 {
     'name': 'Service Level Agreements',
     'summary': 'Define SLAs for your Contracts',
-    'version': '1.0',
+    'version': '8.0.1.0.0',
     "category": "Project Management",
     'description': """\
 Contract SLAs
@@ -38,7 +38,7 @@ SLA Controlled Documents
 ========================
 
 Only Project Issue documents are made SLA controllable.
-However, a framework is made available to easily build extensions to make
+However, a framework is made available to easilly build extensions to make
 other documents models SLA controlled.
 
 SLA controlled documents have attached information on the list of SLA rules
@@ -112,8 +112,9 @@ Credits and Contributors
   * Daniel Reis (https://launchpad.net/~dreis-pt)
   * David Vignoni, author of the icon from the KDE 3.x Nuvola icon theme
 """,
-    'author': 'Daniel Reis',
+    'author': "Daniel Reis,Odoo Community Association (OCA)",
     'website': '',
+    'license': 'AGPL-3',
     'depends': [
         'project_issue',
     ],
@@ -124,7 +125,9 @@ Credits and Contributors
         'analytic_account_view.xml',
         'project_view.xml',
         'project_issue_view.xml',
+        'project_task_view.xml',
         'security/ir.model.access.csv',
+        'report/report_sla_view.xml',
     ],
     'demo': ['project_sla_demo.xml'],
     'test': ['test/project_sla.yml'],
