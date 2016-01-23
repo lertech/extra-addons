@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-  <data noupdate="1">  
+  <data>  
     <record model="res.bank"  id="l10n_ve_bank0">
       <field name="name">Banco Central de Venezuela</field>
       <field name="bic">0001</field>

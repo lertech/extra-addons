@@ -1,47 +1,26 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2014 Lertech <www.lertech.com.ve>
-#
-#    Modified: Francisco Lercari <flercari@lertech.com.ve>,
-#
-#    Created: 2014-01-16
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
 {
-    'name': 'Venezuelan Bank',
-    'version': '0.1',
-    'author': 'LerTech',
+    'name': 'Bank of Venezuelan',
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/master/openerp/addons/base/module/module_data.xml
+    # for the full list
     'category': 'Localization',
+    'summary': 'list Bank of Venezuelan',
+    'website': 'https://www.lertech.com.ve/',
+    'version': '8.0.1.0',
     'description': """
 Load Bank of Venezuela
 """,
-    'website': 'http://www.lertech.com.ve/',
+    'author': 'LerTech',
     'images' : [],
     'depends': [
         'base',
+        'l10n_ve'
     ],
     'data': [
         'data/ve_bank.xml',
     ],
     'demo': [],
     'test': [],
-    'installable': True,
-    'auto_install': False,
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

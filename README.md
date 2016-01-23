@@ -13,6 +13,7 @@ addon | version | summary
 [website_anonymous_hide_prices](website_anonymous_hide_prices/) | 8.0.0.1.0 | Hide prices, quantity select and "add to cart" button if user is not authenticated
 [website_favicon](website_favicon/) | 8.0.0.1.0 | Add a favicon
 [website_show_stock_available](website_show_stock_available/) | 8.0.0.1.0 |  Adds text to show if product is available
+[l10n_ve_bank](l10n_ve_bank/) | 8.0.1.0.0 |  list Bank of Venezuelan
 
 Unported addons
 ---------------
