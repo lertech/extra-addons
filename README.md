@@ -29,5 +29,6 @@ addon | version | summary
 [account_check](account_check/) | 1.0 (unported) | Account Check Management
 [account_invoice_delivery_address](account_invoice_delivery_address/) | 1.0 (unported) | Adds delivery address to the invoice
 [account_periodical_invoicing](account_periodical_invoicing/) | 1.2 (unported) | Module for making easily periodical invoices to customers
+[sprint_kanban](sprint_kanban/) | 1.6 (unported) | Sprint Kanban
 
 [//]: # (end addons)
