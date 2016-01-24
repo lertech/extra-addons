@@ -1,0 +1,74 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* website_anonymous_hide_prices
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-25 03:54+0000\n"
+"PO-Revision-Date: 2016-01-24 11:37-0400\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products_item
+msgid "&nbsp;"
+msgstr "&nbsp;"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.product
+msgid "Add to Cart"
+msgstr "Añadir al carro"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products
+msgid ""
+"Auf dieser Website verkaufen wir ausschliesslich an gewerbliche, "
+"akkreditierte Kunden."
+msgstr ""
+"En este sitio vendemos exclusivamente a los comercios y clientes, "
+"acreditados."
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products
+msgid ""
+"Für ein Händlerkonto oder Fragen zu unserem Sortiment und Händlern nutzen "
+"Sie gerne unser Kontaktformular."
+msgstr ""
+"Para obtener una cuenta o preguntar acerca de nuestra gama de productos y "
+"distribuidores debe utilizar nuestro formulario de contacto."
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products
+msgid "Gewerbliche Kunden"
+msgstr "Clientes Comerciales"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products
+msgid "Kontaktformular"
+msgstr "Contacto"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.product view:website:website_sale.product_price
+msgid "Product not available"
+msgstr "Producto no disponible"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products_item
+msgid "Sale"
+msgstr "Venta"
+
+#. module: website_anonymous_hide_prices
+#: view:website:website_sale.products
+msgid ""
+"Sie können unsere Produkte sehen, die Preise und Kauffunktionen sind "
+"abgeschaltet."
+msgstr ""
+"Usted puede ver nuestros productos, precios y funciones de compra están "
+"apagados."
