@@ -22,6 +22,7 @@ addon | version | summary
 [project_sla](project_sla/) | 8.0.1.0.0 |  Define SLAs for your Contracts
 [ir_attachment_force_storage](ir_attachment_force_storage/) | 8.0.1.0.0 |  Force move attachments to DB storage
 [odoosms](odoosms/) | 8.0.2.0.0 |  SMS Client module provides
+[im_notif](im_notif/) | 8.0.1.0.1 |  IM Notifications
 
 Unported addons
 ---------------
