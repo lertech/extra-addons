@@ -1,21 +1,23 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_check
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: odoo-addons (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-02 18:20+0000\n"
-"PO-Revision-Date: 2015-10-22 21:00+0000\n"
+"PO-Revision-Date: 2016-02-02 10:32-0400\n"
 "Last-Translator: Juan Jose Scarafia <scarafia.juanjose@gmail.com>\n"
-"Language-Team: Spanish (Venezuela) (http://www.transifex.com/adhoc/ingadhoc-odoo-addons-8-0/language/es_VE/)\n"
+"Language-Team: Spanish (Venezuela) (http://www.transifex.com/adhoc/ingadhoc-"
+"odoo-addons-8-0/language/es_VE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Language: es_VE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #. module: account_check
 #: selection:account.check,clearing:0
@@ -844,8 +846,8 @@ msgstr ""
 #: code:addons/account_check/models/account_check.py:443
 #, python-format
 msgid ""
-"You can not cancel third checks in states other than \"draft or \"holding\"."
-" First try to change check state."
+"You can not cancel third checks in states other than \"draft or \"holding\". "
+"First try to change check state."
 msgstr ""
 
 #. module: account_check
