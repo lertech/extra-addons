@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="menu" inherit_id="website_myaccount.menu">
+            <xpath expr="//li[@role='presentation'][last()]" position="after">
+                <li role="presentation" t-att-class="'active' if currentOption == 'subscriptions' else ''"><a href="/myaccount/subscriptions">Subscriptions</a></li>
+            </xpath>
+        </template>
+
+        <template id="subscriptions">
+            <t t-call="website.layout">
+                <div id="wrap" class="js_sale">
+                    <div class="oe_structure"/>
+                    <div class="container myaccount-page mt32">
+                        <div class="row">
+                            <t t-call="website_myaccount.menu">
+                                <t t-set="currentOption" t-value="'subscriptions'"/>
+                            </t>
+                            <div class="col-sm-9 myaccount-subscriptions">
+                                <ol class="breadcrumb text-uppercase no-links">
+                                    <li><a href="/myaccount">Dashboard</a></li>
+                                    <li class="active">Subscriptions</li>
+                                </ol>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 40%;" class="text-center">Subscription</th>
+                                                <th style="width: 20%;" class="text-center">Beginning</th>
+                                                <th style="width: 20%;" class="text-center">Ending</th>
+                                                <th style="width: 20%;" class="text-center">Remaining</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="subscriptions"
+                                               t-as="subscription">
+                                                <tr>
+                                                    <td><a t-attf-href="/curso/#{ slug(subscription.training_id) }" t-esc="subscription.training_id.name"/></td>
+                                                    <td class="text-center"><span t-field="subscription.date_init"/></td>
+                                                    <td class="text-center"><span t-field="subscription.date_end"/></td>
+                                                    <td class="text-center">
+                                                        <t t-if="subscription.remaining_days > 0"><span t-esc="subscription.remaining_days"/> <span>days</span></t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</openerp>

@@ -15,6 +15,7 @@ addon | version | summary
 [website_show_stock_available](website_show_stock_available/) | 8.0.0.1.0 |  Adds text to show if product is available
 [website_myaccount](website_myaccount/) | 8.0.1.0.0 |  Website for my account
 [website_myaccount_invoice](website_myaccount_invoice/) | 8.0.1.0.0 |  Invoices information in my account
+[website_myaccount_subscription](website_myaccount_subscription/) | 8.0.1.0.0 |   Add list of user subscriptions to training/courses to My Account
 [website_myaccount_sale](website_myaccount_sale/) | 8.0.1.0.0 |  Sale orders information in my account
 [l10n_ve_bank](l10n_ve_bank/) | 8.0.1.0.0 |  List Bank of Venezuelan
 [account_voucher_payline](account_voucher_payline/) | 8.0.1.2.1 |  Module that modifies account voucher so that you can extend this module
