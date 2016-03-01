@@ -13,9 +13,8 @@ addon | version | summary
 [website_anonymous_hide_prices](website_anonymous_hide_prices/) | 8.0.0.1.0 | Hide prices, quantity select and "add to cart" button if user is not authenticated
 [website_favicon](website_favicon/) | 8.0.0.1.0 | Add a favicon
 [website_show_stock_available](website_show_stock_available/) | 8.0.0.1.0 |  Adds text to show if product is available
-
 [website_myaccount](website_myaccount/) | 8.0.1.0.0 |  Website for my account
-
+[website_myaccount_invoice](website_myaccount_invoice/) | 8.0.1.0.0 |  Invoices information in my account
 [l10n_ve_bank](l10n_ve_bank/) | 8.0.1.0.0 |  List Bank of Venezuelan
 [account_voucher_payline](account_voucher_payline/) | 8.0.1.2.1 |  Module that modifies account voucher so that you can extend this module
 [account_journal_payment_subtype](account_journal_payment_subtype/) | 8.0.1.0.1 |  Adds payment subtype field to cash and bank journals.
