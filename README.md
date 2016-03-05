@@ -28,6 +28,7 @@ addon | version | summary
 [odoosms](odoosms/) | 8.0.2.0.0 |  SMS Client module provides
 [im_notif](im_notif/) | 8.0.1.0.1 |  IM Notifications
 [website_seo](website_seo/) | 8.0.1.0.0 |   Website SEO improvements
+[auth_brute_force](auth_brute_force/) | 8.0.1.0.0 |  Authentification - Brute-force Attack
 
 Unported addons
 ---------------
